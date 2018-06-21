@@ -15,6 +15,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF", "EF\EF.csproj", "{6FF3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsFramework", "JsFramework\JsFramework.csproj", "{DD4C9087-6740-42E6-8E73-AE06467B156E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{48CF3256-260F-44C0-B672-B70E7BF7C35F}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,29 +55,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://liu00076.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Helper\\Helper.csproj
-		SccProjectName1 = Helper
-		SccLocalPath1 = Helper
-		SccProjectUniqueName2 = TestClass\\TestClass.csproj
-		SccProjectName2 = TestClass
-		SccLocalPath2 = TestClass
-		SccProjectUniqueName3 = MvcWeb\\MvcWeb.csproj
-		SccProjectName3 = MvcWeb
-		SccLocalPath3 = MvcWeb
-		SccProjectUniqueName4 = EmptyMVC\\EmptyMVC.csproj
-		SccProjectName4 = EmptyMVC
-		SccLocalPath4 = EmptyMVC
-		SccProjectUniqueName5 = EF\\EF.csproj
-		SccProjectName5 = EF
-		SccLocalPath5 = EF
-		SccProjectUniqueName6 = JsFramework\\JsFramework.csproj
-		SccProjectName6 = JsFramework
-		SccLocalPath6 = JsFramework
 	EndGlobalSection
 EndGlobal
