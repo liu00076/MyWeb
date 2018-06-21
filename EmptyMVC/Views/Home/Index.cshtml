@@ -1,0 +1,22 @@
+﻿@{
+    Layout = null;
+}
+@model IQueryable<EmptyMVC.Models.Person>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div>
+        欢迎来到Home/Index 页！@ViewBag.DateTime
+        @foreach (var p in Model) {  
+            <div class="item" style="border-bottom:1px dashed silver;"> 
+                <h3>@p.Name</h3> 
+                <p>年龄：@p.Age</p>
+            </div>
+        }
+    </div>
+</body>
+</html>

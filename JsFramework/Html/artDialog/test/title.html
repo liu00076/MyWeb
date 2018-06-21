@@ -1,0 +1,44 @@
+﻿<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>test</title>
+	<style>
+		html, body {
+			height: 100%;
+		}
+		#fixed {
+			position: fixed;
+			bottom: 0;
+			left: 20%;
+		}
+	</style>
+</head>
+<body>
+<button id="test">title('hello world')</button>
+<script src="../../../Scripts/common/sea.js"></script>
+<script>
+seajs.config({
+  alias: {
+    "jquery": "jquery-2.2.3.js"
+  }
+});
+</script>
+
+<script>
+seajs.use(['jquery', '../../../Scripts/artDialog/dialog'], function ($, dialog) {
+	
+	var d = dialog({
+		title: 'loading..'
+	});
+
+	d.show();
+
+	$('#test').on('click', function () {
+		d.title('hello world');
+	});
+
+});
+</script>
+</body>
+</html>

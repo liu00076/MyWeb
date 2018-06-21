@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="WebAgency_MarketModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Tran_Commission">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TransactionKeyId" Type="uniqueidentifier" />
+          <Property Name="CommissionNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="CommissionTime" Type="datetime" />
+          <Property Name="PayTypeKeyId" Type="uniqueidentifier" />
+          <Property Name="ReceiptKeyId" Type="uniqueidentifier" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="200" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="CreateUserKeyId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="UpdateUserKeyId" Type="uniqueidentifier" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="RequestSourceType" Type="int" />
+          <Property Name="CorporationKeyId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CityKeyId" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="WebAgency_MarketModelStoreContainer">
+          <EntitySet Name="Tran_Commission" EntityType="Self.Tran_Commission" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WebAgency_MarketModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="WebAgency_MarketEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Tran_Commission" EntityType="WebAgency_MarketModel.Commission" />
+        </EntityContainer>
+        <EntityType Name="Commission">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="Guid" Nullable="false" />
+          <Property Name="TransactionKeyId" Type="Guid" />
+          <Property Name="CommissionNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="CommissionTime" Type="DateTime" Precision="3" />
+          <Property Name="PayTypeKeyId" Type="Guid" />
+          <Property Name="ReceiptKeyId" Type="Guid" />
+          <Property Name="Remark" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateUserKeyId" Type="Guid" Nullable="false" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUserKeyId" Type="Guid" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="RequestSourceType" Type="Int32" />
+          <Property Name="CorporationKeyId" Type="Guid" Nullable="false" />
+          <Property Name="CityKeyId" Type="Guid" Nullable="false" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WebAgency_MarketModelStoreContainer" CdmEntityContainer="WebAgency_MarketEntities">
+          <EntitySetMapping Name="Tran_Commission">
+            <EntityTypeMapping TypeName="WebAgency_MarketModel.Commission">
+              <MappingFragment StoreEntitySet="Tran_Commission">
+                <ScalarProperty Name="CityKeyId" ColumnName="CityKeyId" />
+                <ScalarProperty Name="CorporationKeyId" ColumnName="CorporationKeyId" />
+                <ScalarProperty Name="RequestSourceType" ColumnName="RequestSourceType" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="UpdateUserKeyId" ColumnName="UpdateUserKeyId" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="CreateUserKeyId" ColumnName="CreateUserKeyId" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="ReceiptKeyId" ColumnName="ReceiptKeyId" />
+                <ScalarProperty Name="PayTypeKeyId" ColumnName="PayTypeKeyId" />
+                <ScalarProperty Name="CommissionTime" ColumnName="CommissionTime" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="CommissionNo" ColumnName="CommissionNo" />
+                <ScalarProperty Name="TransactionKeyId" ColumnName="TransactionKeyId" />
+                <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

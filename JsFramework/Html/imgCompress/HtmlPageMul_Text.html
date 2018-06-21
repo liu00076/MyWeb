@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <input type="file" id="loadFile" accept="image/*" multiple="multiple" />
+        <input type="button" id="submit" value="上传" />
+
+        <input type="file" id="secondFile" accept="image/*" multiple="multiple" />
+        <input type="button" id="secondSubmit" value="上传" />
+    </div>
+    <div id="result" style="float: left;">
+    </div>
+    <script type="text/javascript" src="../../Scripts/common/require.js"></script>
+    <script>
+        ////图片压缩后的base64字段和图片基本信息
+        require(['../../scripts/requireConfig'], function () {
+            require(['compress'], function(compress) {
+                var firstOpt = {
+                    'fileId': 'loadFile'
+                }
+
+                var secondOpt = {
+                    'fileId': 'secondFile'
+                }
+                //将会导致所有的数据都放在compress对象的result数组中
+                var fristFileUpload = compress(firstOpt);
+                var secondFileUpload = compress(secondOpt);
+                //第一个控件上传
+                $("#submit").click(function() {
+                    console.log(fristFileUpload.result);
+                });
+                //第二个控件上传
+                $("#secondSubmit").click(function() {
+                    console.log(secondFileUpload.result);
+                });
+            });
+        })
+    </script>
+</body>
+</html>

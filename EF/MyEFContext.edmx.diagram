@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="cfbcc4e907154049a2a7d40e4cf373c5" Name="多对多关系">
+        <EntityTypeShape EntityType="GGN_NewsModel.TCategory" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="GGN_NewsModel.TGame" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="GGN_NewsModel.TGameRCategory" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <AssociationConnector Association="GGN_NewsModel.游戏关联分类" ManuallyRouted="false" />
+        <AssociationConnector Association="GGN_NewsModel.分类关联游戏" />
+        </Diagram>
+      <Diagram DiagramId="03b90900383b489ba41a40b29a48516a" Name="一对多关系" >
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

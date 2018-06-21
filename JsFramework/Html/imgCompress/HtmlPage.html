@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    <script type="text/javascript" src="../Scripts/common/jquery-2.2.3.js"></script>
+    <input type="file" id="loadFile" accept="image/*" multiple="multiple"/>
+<script>
+    /*common*/
+    /**
+     * canvas图片压缩
+     * @param  {[Object]} opt [配置参数]
+     * @param  {[Function]} cbk [回调函数]
+     * @return {[Void]}
+     * example:
+     * var opt = {
+        'type' : 1,//为1为预览，建议不为1或后期进行改进
+        'file' : "#loadFile"//文件上传控件
+    },_compress = require('app/compress');
+    _compress(opt,function (result) {
+        console.log(result)
+    });
+     */
+    $(document).ready(function() {
+        function writeDom(opt, cbk) {
+            var _opt = opt,
+                _cbk = cbk;
+            $('#img,#_canvas,#img-c').remove();
+            $('body').append($('<canvas id="_canvas" style="display: none;"></canvas><img id="img-c" src="" style="display:none;"/><img id="img" src="" style="width:300px;"/>'));
+            _image = new Image();
+            _image.src = _opt.src || "";
+            $('#img-c').attr('src', _opt.src)[0].onload = function () {
+                var _this = $(this);
+                var _canvas = document.getElementById('_canvas');
+                _canvas.width = _this.width();
+                _canvas.height = _this.height();
+                //等比例缩放
+                //_canvas.width = 500;
+                //_canvas.height = 300;
+                var _context = _canvas.getContext('2d');
+                _context.drawImage(_image, 0, 0);
+                if (_opt.type) {
+                    $('#img').attr('src', _canvas.toDataURL('image/jpeg', _opt.scale));
+                };
+                _cbk(_canvas.toDataURL('image/jpeg', _opt.scale));
+            };
+        }
+
+        function _compress(opt, cbk) {
+            var _opt = {
+                'type': opt.type || 0,
+                'file': opt.file ? $(opt.file) : $("#loadFile")
+            },
+                _file = _opt.file,
+                _cbk = cbk || function () { };
+            _file.change(function () {
+                var file = $(this)[0].files[0];
+                var fReader = new FileReader();
+                fReader.readAsDataURL(file);
+                fReader.onload = function (e) {
+                    var _num = +prompt('请输入压缩比例');
+                    if (isNaN(_num)) {
+                        _num = 1;
+                    };
+                    _opt.scale = _num;
+                    result = _opt.src = this.result;
+                    writeDom(_opt, _cbk);
+                };
+            });
+        }
+
+        var opt = {
+            'type': 1, //为1为预览，建议不为1或后期进行改进
+            'file': "#loadFile" //文件上传控件
+        }
+        _compress(opt, function (result) {
+            console.log(result);
+            $.post("saveImage.aspx?type=3", { "img64": result }, function (data) {
+                console.log(data);
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+﻿
+
+jquery1.7以上的都支持模块化加载，只是jquery默认的是支持amd，不支持cmd。所以要用seajs加载jquery时，我们需要稍微做下改动，需要把以下内容做下修改，具体修改方式如下：
+把	
+if (typeof define === "function" && (define.amd)) {
+  define( "jquery", [], function() {
+    return jQuery;
+  });
+}
+改成	
+if (typeof define === "function" && (define.amd || define.cmd)) {
+  define( "jquery", [], function() {
+    return jQuery;
+  });
+}
+或	
+if (typeof define === "function") {
+  define( "jquery", [], function() {
+    return jQuery;
+  });
+}
+
+通过以上代码的修改就可以成功解决seajs加载jquery时提示$ is not a function问题，希望对大家有所帮助。
+http://www.jb51.net/article/73792.htm

@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <script type="text/javascript" src="../Scripts/common/jquery-2.2.3.js"></script>
+    <div>
+        <input type="file" id="loadFile" accept="image/*" multiple="multiple" />
+        <input type="button" id="submit" value="上传" />
+    </div>
+    <div id="result" style="float: left;">
+    </div>
+    <script>
+        //图片压缩后的base64字段和图片基本信息
+        $(document).ready(function () {
+            $("#loadFile").change(function () {
+                $('body').append($('<canvas id="_canvas" style="display: none;"></canvas>'));
+                for (var i = 0; i < $(this)[0].files.length; i++) {
+                    var fReader = new FileReader();
+                    var file = $(this)[0].files[i];
+                    fReader.readAsDataURL(file);
+                    if (window.loadFileResult == undefined || loadFileResult.length <= 0) {
+                        loadFileResult = [];
+                    }
+                    fReader.onload = (function (file, loadFileResult) {
+                        return function (e) {
+                            var extendOpt = {
+                                'scale': 1, //设置压缩比 默认不压缩
+                                'maxRate': 3 / 4, //图片最大比率
+                                'minRate': 1 / 2, //图片最小比率
+                                'limtSize': undefined //不做图片限制
+                            }
+                            debugger;
+                            $.extend(extendOpt, opt);
+                            var _canvas = document.getElementById('_canvas');
+                            var _context = _canvas.getContext('2d');
+                            _image = new Image();
+                            _image.src = this.result;
+                            if (extendOpt.limtSize != undefined) {
+                                if (file.size / (1024 * 1024) > extendOpt.limtSize) {
+                                    alert("图片" + file.name + "超出大小限制" + extendOpt.limtSize + "M，请更换图片");
+                                    return;
+                                }
+                            }
+                            if (!(_image.width > 600 || _image.height > 600)) {
+                                alert("图片" + file.name + "单边尺寸不符合600px的最低尺寸要求，无法进行上传，请更换图片");
+                                return;
+                            }
+                            originalRate = _image.height / _image.width;
+                            if (originalRate < extendOpt.minRate || originalRate > extendOpt.maxRate) {
+                                alert("图片" + file.name + "比率和" + extendOpt.minRate + "与" + extendOpt.maxRate + "不匹配，请更换图片");
+                                return;
+                            }
+                            _canvas.width = _image.width;
+                            _canvas.height = _image.height;
+                            if (isNaN(extendOpt.scale)) {
+                                _num = +prompt("请输入图片" + file.name + "压缩比例");
+                            } else {
+                                _num = extendOpt.scale;
+                            }
+                            _context.drawImage(_image, 0, 0);
+
+                            //将图片压缩后保存到对象中
+                            loadFileResult.push(file.name + "|" + _canvas.toDataURL(file.type, _num));
+                            //等比列预览图片
+                            if (opt.isPreview) {
+                                _image.src = _canvas.toDataURL(file.type, _num);
+                                $(_image).attr("width", "400px");
+                                $(_image).attr("height", 400 * originalRate + "px");
+                                $("#" + extendOpt.resultId).append($(_image));
+                            }
+                        }
+                    })(file, loadFileResult);
+                }
+
+            });
+
+            // 从 canvas 提取图片 image  
+            function convertCanvasToImage(canvas, imgType) {
+                //新Image对象，可以理解为DOM  
+                var image = new Image();
+                // canvas.toDataURL 返回的是一串Base64编码的URL
+                image.src = canvas.toDataURL(imgType);
+                return image;
+            }
+
+            //配置上传参数
+            var opt = {
+                'scale': 0.1,     //设置压缩比
+                'maxRate': 3 / 4,   //图片最大比率
+                'minRate': 1 / 2,    //图片最小比率
+                'limtSize': 1,      //大小限制,以M为单位
+                'isPreview': true,   //是否预览
+                'resultId': 'result'    //预览图片输出div
+            }
+
+            $("#submit").click(function () {
+                if (window.result.length != 0) {
+                    var result = JSON.stringify(window.result);
+                    $.post("saveImage.aspx?type=2", { "img64": result }, function (data) {
+                        if (data == "true") {
+                            alert("上传成功！");
+                        } else {
+                            alert("上传失败！");
+                        }
+                        //将图片上传设置为空
+                        window.result = [];
+                        //将预览区域图片清空
+                        $("#result").html("");
+                    });
+                } else {
+                    alert("请选择图片后，在上传！");
+                }
+            });
+
+        });
+
+    </script>
+</body>
+</html>

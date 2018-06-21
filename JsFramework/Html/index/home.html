@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    <div style="margin: 0 auto; width:600px">
+        <label>当前时间：</label><span id="currentDate"></span>
+    </div>
+    <div style="margin: 0 auto; width:600px">
+        <div style="margin: 20px 20px 0;">
+            <a href="../artDialog/index.html">artDialog 示例</a>
+            <br />
+            <a href="../jQueryUi/index.html">jQueryUi 示例</a>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="../../Scripts/common/require.js"></script>
+<script>
+    require.config({
+
+        paths: {
+            jquery: '../../Scripts/common/jquery-2.2.3',
+            commonHelper: "../../Scripts/helper/commonHelper"
+        }
+    });
+
+    require(['jquery', 'commonHelper'], function ($,commonHelper) {
+        console.log($().jquery);
+        console.log(commonHelper);
+        var myDate = new Date();
+        $("#currentDate").text(myDate.format("yyyy-MM-dd"));
+    });
+</script>

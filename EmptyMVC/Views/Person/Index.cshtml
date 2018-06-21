@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+@model IQueryable<EmptyMVC.Models.Person>
+@{
+    foreach (var p in Model)
+    {
+        <div class="item" style="border-bottom: 1px dashed silver;">
+            <h3>@p.Name</h3>
+            <p>年龄：@p.Age</p>
+        </div>
+    }
+}
+<span>copyright@@@DateTime.Now.Year</span>

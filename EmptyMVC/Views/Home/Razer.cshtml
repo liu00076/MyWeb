@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Razer";
+}
+
+@{
+    string str = "<h3>刘道阳</h3> ";
+    Response.Write(str);
+    <br />
+    @Html.Raw(str);
+    <br />
+    HtmlString htmlRaw = new HtmlString(str);
+    <!--this.WriteLiteral(htmlRaw.ToString());-->
+    <br />
+    @htmlRaw
+}
+
+<!--自定义视图方法 在 razer的后台类里面 将添加 pulic HelperResult ShowHi的方法 -->
+@helper ShowHi(string a)
+{
+    <h2>@a</h2>
+}
+@ShowHi("xiaohai")
+
+@{
+    <!-- 使用razer内置标签 <test> 输出文本-->
+    <text>我爱家乡……</text>
+    <br />
+    @: 我爱家乡……
+}
+<!-- 只会请求 页面，不会请求 对应页面的controller 中的 cs代码 -->
+@{Html.RenderPartial("~/views/Home/PartView.cshtml");}
+
+<!-- 先请求 对应页面的controller 中的 action ，然后再请求 页面-->
+@{Html.RenderAction("PartView");}
+<br />
+@section scripts{
+    哈哈哈，玉面飞龙~
+
+}
