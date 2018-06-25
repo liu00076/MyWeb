@@ -21,10 +21,6 @@ namespace Helper.Linq
         /// <returns></returns>
         public static T GetEval<T>(this Type type, string lambdaString)
         {
-            if (type == null)
-            {
-                return default(T);
-            }
             LambdaExpression func = System.Linq.Dynamic.DynamicExpression.ParseLambda(type, null, lambdaString);
             ParameterExpression objParameter = Expression.Parameter(typeof(object), "obj");
             UnaryExpression objConvert = Expression.Convert(objParameter, type);
