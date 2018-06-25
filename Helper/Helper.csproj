@@ -110,6 +110,9 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -145,6 +148,7 @@
     <Compile Include="Helper\Log\Log4Helper.cs" />
     <Compile Include="Helper\Log\LogCustomerExample.cs" />
     <Compile Include="Helper\Net\TCP\TcpHelper.cs" />
+    <Compile Include="Helper\Linq\LinqHelper.cs" />
     <Compile Include="Reflect\AssemblyHelper.cs" />
     <Compile Include="Attributes\TrimAttribute.cs" />
     <Compile Include="Helper\Cache\CacheHelper.cs" />
