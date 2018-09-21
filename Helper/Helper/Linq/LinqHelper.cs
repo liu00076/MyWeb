@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
-namespace Helper.Linq
+namespace Helper.Helper.Linq
 {
     /// <summary>
     /// Linq 的帮助类
@@ -28,6 +28,5 @@ namespace Helper.Linq
             Expression<T> resultExpression = Expression.Lambda<T>(objInvoke, objParameter);
             return resultExpression.Compile();
         }
-
     }
 }
