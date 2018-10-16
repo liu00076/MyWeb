@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<database>
+  <table name="girl" primarykeys="id" type="TABLE">
+    <field fieldLength="4" fieldType="int" name="id" primaryKey="1" scale="0"/>
+    <field comment="年龄" fieldLength="4" fieldType="int" name="age" nullable="1" scale="0"/>
+    <field comment="size" fieldLength="1" fieldType="varchar" name="cup_size" nullable="1" scale="0"/>
+  </table>
+</database>

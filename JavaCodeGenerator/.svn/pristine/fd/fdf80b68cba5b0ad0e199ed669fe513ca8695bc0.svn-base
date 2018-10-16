@@ -1,0 +1,51 @@
+
+<div class="modal-header">
+	<span class="modal-title">新增${tableModel.comment}</span>
+	<div class="pull-right"><a class="close"><i ng-click="cancel()" class="glyphicon glyphicon-remove "></i></a></div>
+</div>
+<div class="modal-body">
+
+	<form class="form-horizontal" role="form" name="${tableModel.objectName}AddForm" sync-form >
+	#foreach ( $field in ${tableModel.fieldList})
+			<div class="control-group" ng-class="{ 'has-error':(${tableModel.objectName}AddForm.${field.propertyName}.$invalid && !${tableModel.objectName}AddForm.${field.propertyName}.$pristine)}">
+
+				<!-- Text input-->
+				<label class="control-label" >${field.comment}</label>
+				<div class="controls" ng-class="{'has-error': ${tableModel.objectName}AddForm.${field.propertyName}.$invalid  && !${tableModel.objectName}AddForm.${field.propertyName}.$pristine}">
+					#if($field.javaType != "Date")
+						<input type="text" name="${field.propertyName}" placeholder="" class="form-control input-xlarge" ng-model="formData.${field.propertyName}" #if($field.fieldLength) ng-maxlength="${field.fieldLength}" #end required >
+						<p ng-show="${tableModel.objectName}AddForm.${field.propertyName}.$error.required  && !${tableModel.objectName}AddForm.${field.propertyName}.$pristine"  class="help-block">必填</p>
+						#if($field.fieldLength)				
+						<p ng-show="${tableModel.objectName}AddForm.${field.propertyName}.$error.maxlength  && !${tableModel.objectName}AddForm.${field.propertyName}.$pristine"  class="help-block">请输入小于${field.fieldLength}个字符</p>
+						#end	
+					#end	
+					#if($field.javaType == "Date")
+						<div class="input-append date date-picker">
+								<input class="form-control input-xlarge" type="text"
+									ng-model="formData.${field.propertyName}" required name="${field.propertyName}"
+									placeholder="yyyy-mm-dd"><span class="add-on"><i
+									class="icon-calendar help-inline"></i></span>
+							</div>
+					#end		
+				</div>
+			</div>
+	#end
+	</form>
+
+</div>
+<div class="modal-footer">
+	<load-btn text="提交" load-text="正在提交" loading="isloading" abled="!${tableModel.objectName}AddForm.$invalid && !isloading" class="btn btn-primary" type="button" when-click="ok()" ></load-btn>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		$(".date-picker").datepicker({
+			language : 'ch',
+			format : "yyyy-mm-dd",
+			startView : 0,
+			minViewMode : 0,
+			weekStart : 1,
+			todayBtn : true
+		});
+	});
+</script>

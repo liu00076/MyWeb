@@ -1,0 +1,22 @@
+##业务逻辑接口的生成模板
+
+package ${config.package}.${config.module}.service;
+
+import com.misterfat.springboot.starter.mybatis.core.BaseService;
+
+import ${config.package}.${config.module}.entity.${tableModel.className};
+
+/**
+ * 
+ * 说明：处理对${tableModel.comment}的业务操作
+ * 
+ * @author ${config.author}
+ * 
+ * @version ${config.version}
+ * 
+ * @since ${config.date}
+ */
+public interface ${tableModel.className}Service extends BaseService<${tableModel.className}> {
+
+}
+

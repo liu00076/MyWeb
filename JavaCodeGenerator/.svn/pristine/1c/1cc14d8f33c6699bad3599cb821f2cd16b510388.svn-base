@@ -1,0 +1,35 @@
+##采集类模板
+package ${config.package}.${config.module}.pipeline;
+
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import ${config.package}.${config.module}.dto.${tableModel.className}ExtractDto;
+import ${config.package}.${config.module}.module.${tableModel.className};
+import ${config.package}.${config.module}.service.${tableModel.className}Service;
+
+import us.codecraft.webmagic.ResultItems;
+import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.pipeline.Pipeline;
+
+@Component
+public class ${tableModel.className}Pipeline implements Pipeline {
+
+	@Autowired
+	private ${tableModel.className}Service ${tableModel.objectName}Service;
+
+	@Override
+	public void process(ResultItems resultItems, Task task) {
+		List<${tableModel.className}ExtractDto> list = resultItems.get("list");
+		for (${tableModel.className}ExtractDto ${tableModel.objectName}ExtractDto : list) {
+			${tableModel.className} ${tableModel.objectName} = new ${tableModel.className}();
+			BeanUtils.copyProperties(${tableModel.objectName}ExtractDto, ${tableModel.objectName});
+			${tableModel.objectName}Service.insert(${tableModel.objectName});
+		}
+
+	}
+
+}

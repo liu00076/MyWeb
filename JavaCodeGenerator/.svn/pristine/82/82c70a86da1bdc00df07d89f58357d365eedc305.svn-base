@@ -1,0 +1,52 @@
+##业务逻辑实现类的生成模板
+package ${config.package}.${config.module}.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.misterfat.presentation.mybatis.service.impl.AbstractBaseService;
+import com.misterfat.presentation.mybatis.dao.BaseDAOInterface;
+ #if(${mybatisConfig.idJdbcType}=="VARCHAR")
+import com.misterfat.util.UUIDUtil;
+#end
+import ${config.package}.${config.module}.dao.${tableModel.className}Dao;
+import ${config.package}.${config.module}.module.${tableModel.className};
+import ${config.package}.${config.module}.service.${tableModel.className}Service;
+
+@Service
+@Transactional
+public class ${tableModel.className}ServiceImpl extends AbstractBaseService<${tableModel.className}>
+		implements ${tableModel.className}Service {
+
+	@Autowired
+	private ${tableModel.className}Dao ${tableModel.objectName}Dao;
+	
+	 #if(${mybatisConfig.idJdbcType}=="VARCHAR" )
+    
+    @Override
+	public void insert(${tableModel.className} ${tableModel.objectName}) {
+		if (null == ${tableModel.objectName}.get${mybatisConfig.firstUpperPropId}()) {
+			${tableModel.objectName}.set${mybatisConfig.firstUpperPropId}(UUIDUtil.generatePrimaryKey());
+		}
+		super.insert(${tableModel.objectName});
+	}
+
+	@Override
+	public void insertSelective(${tableModel.className} ${tableModel.objectName}) {
+		if (null == ${tableModel.objectName}.get${mybatisConfig.firstUpperPropId}()) {
+			${tableModel.objectName}.set${mybatisConfig.firstUpperPropId}(UUIDUtil.generatePrimaryKey());
+		}
+		super.insertSelective(${tableModel.objectName});
+	}
+
+  	#end
+
+	@Override
+	protected BaseDAOInterface<${tableModel.className}> getDAO() {
+		return ${tableModel.objectName}Dao;
+	}
+
+}
+
+

@@ -1,0 +1,9 @@
+#write => D:/workspace_template/codeGenerator/gen.properties
+#Tue May 23 15:28:30 CST 2017
+tableXmlPath=D\:/workspace_template/codeGenerator/table.xml
+version=1.0
+package=com.yilaiok.catering.data.shop.wx
+controllerPackage=user
+module=core
+author=\u803F\u6CAB\u7136
+role=user

@@ -1,0 +1,87 @@
+##数据对象类的生成模板
+package ${config.package}.${config.module}.dto;
+
+
+
+#if(${tableModel.hasBigDecimal} == '1')
+import java.math.BigDecimal;
+#end
+
+#if(${tableModel.hasDate} == '1')
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+import com.misterfat.util.DateUtil;
+
+import java.util.Date;
+#end
+
+import java.io.Serializable;
+
+/**
+ * 
+ * 
+ * 
+ * @author ${config.author}
+ * 
+ * @version 1.0
+ * 
+ * @since ${config.date}
+ */
+public class ${tableModel.className}Dto  implements Serializable {
+
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+	
+#foreach ( $property in ${tableModel.fieldList})
+
+   
+
+	#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType} ${property.propertyName}; //${property.comment}
+
+#end
+
+/** 以下为get,set方法 */
+#foreach ( $property in ${tableModel.fieldList})
+    
+    #set ( $javaType = ${property.javaType} )  
+    #set ( $lowerName = ${property.propertyName} ) 
+   		 #if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+		
+        	
+        	 public ${property.javaType} get${property.firstUpperPropertyName}() {
+		        return this.${property.propertyName};
+	        }
+	        public void set${property.firstUpperPropertyName}(${property.javaType} ${property.propertyName}) {
+	        	this.${property.propertyName} = ${property.propertyName};
+	        }
+	
+
+#end
+
+
+}

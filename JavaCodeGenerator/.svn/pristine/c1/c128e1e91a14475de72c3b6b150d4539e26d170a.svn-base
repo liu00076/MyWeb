@@ -1,0 +1,781 @@
+##查询对象类的生成模板
+package ${config.package}.${config.module}.qo;
+
+
+
+#if(${tableModel.hasBigDecimal} == '1')
+import java.math.BigDecimal;
+#end
+
+#if(${tableModel.hasDate} == '1')
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+import com.misterfat.springboot.starter.core.util.DateUtil;
+
+import java.util.Date;
+#end
+
+import com.misterfat.springboot.starter.mybatis.core.PageQueryCondition;
+
+
+/**
+ * 
+ * QO设置属性的顺序不代表生成SQL的顺序,
+ * SQL生成规则请参考 ${tableModel.className}BaseDao,
+ * where条件中带OR复杂查询不要使用QO
+ *
+ * @author ${config.author}
+ *
+ * @version ${config.version}
+ *
+ * @since ${config.date}
+ */
+public class ${tableModel.className}Qo extends PageQueryCondition {
+
+#foreach ( $property in ${tableModel.fieldList})
+
+
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType} ${property.propertyName}; //${property.comment}等于
+	
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType}[] ${property.propertyName}In; //${property.comment}在...之中
+	
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType}[] ${property.propertyName}NotIn; //${property.comment}不在...之中
+
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 	
+	private ${property.javaType} ${property.propertyName}Not; //${property.comment}不等于
+
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType} ${property.propertyName}GreaterThan; //${property.comment}大于
+
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType} ${property.propertyName}LessThan; //${property.comment}小于
+
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType} ${property.propertyName}GreaterEqual; //${property.comment}大于等于
+
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType} ${property.propertyName}LessEqual; //${property.comment}小于等于
+	
+	private String ${property.propertyName}IsNull; //${property.comment}等于Null
+	
+	private String ${property.propertyName}IsNotNull; //${property.comment}不等于Null
+	
+	private String ${property.propertyName}Like; //${property.comment}包含
+
+	private String ${property.propertyName}NotLike; //${property.comment}不包含
+
+	private String ${property.propertyName}StartWith; //${property.comment}以...开始
+
+	private String ${property.propertyName}NotStartWith; //${property.comment}不以...开始
+
+	private String ${property.propertyName}EndWith; //${property.comment}以...结束 
+
+	private String ${property.propertyName}NotEndWith; //${property.comment}不以...结束 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType} ${property.propertyName}Or; //或者${property.comment}等于
+	
+		#if($property.jdbcType == "TIMESTAMP" )
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType}[] ${property.propertyName}OrIn; //或者${property.comment}在...之中
+	
+		#if($property.jdbcType == "TIMESTAMP" )
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType}[] ${property.propertyName}OrNotIn; //或者${property.comment}不在...之中
+
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 	
+	private ${property.javaType} ${property.propertyName}OrNot; //或者${property.comment}不等于
+
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType} ${property.propertyName}OrGreaterThan; //或者${property.comment}大于
+
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType} ${property.propertyName}OrLessThan; //或者${property.comment}小于
+
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType} ${property.propertyName}OrGreaterEqual; //或者${property.comment}大于等于
+
+ 		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@DateTimeFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@DateTimeFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT)
+        #end 
+	private ${property.javaType} ${property.propertyName}OrLessEqual; //或者${property.comment}小于等于
+	
+	private String ${property.propertyName}OrIsNull; //或者${property.comment}等于Null
+	
+	private String ${property.propertyName}OrIsNotNull; //或者${property.comment}不等于Null
+	
+	private String ${property.propertyName}OrLike; //或者${property.comment}包含
+
+	private String ${property.propertyName}OrNotLike; //或者${property.comment}不包含
+
+	private String ${property.propertyName}OrStartWith; //或者${property.comment}以...开始
+
+	private String ${property.propertyName}OrNotStartWith; //或者${property.comment}不以...开始
+
+	private String ${property.propertyName}OrEndWith; //或者${property.comment}以...结束 
+
+	private String ${property.propertyName}OrNotEndWith; //或者${property.comment}不以...结束 
+	
+
+#end
+
+
+
+/** 以下为get,set方法 */
+#foreach ( $property in ${tableModel.fieldList})
+    
+   		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+        	
+    	public ${property.javaType} get${property.firstUpperPropertyName}() {
+	        return this.${property.propertyName};
+        }
+        
+        public void set${property.firstUpperPropertyName}(${property.javaType} ${property.propertyName}) {
+        	this.${property.propertyName} = ${property.propertyName};
+        }
+    
+   		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+        	
+    	public ${property.javaType}[] get${property.firstUpperPropertyName}In() {
+	        return this.${property.propertyName}In;
+        }
+        
+        public void set${property.firstUpperPropertyName}In(${property.javaType}... ${property.propertyName}In) {
+        	this.${property.propertyName}In = ${property.propertyName}In;
+        }
+    
+   		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+        	
+    	public ${property.javaType}[] get${property.firstUpperPropertyName}NotIn() {
+	        return this.${property.propertyName}NotIn;
+        }
+        
+        public void set${property.firstUpperPropertyName}NotIn(${property.javaType}... ${property.propertyName}NotIn) {
+        	this.${property.propertyName}NotIn = ${property.propertyName}NotIn;
+        }
+        
+        #if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+        public ${property.javaType} get${property.firstUpperPropertyName}Not() {
+			return ${property.propertyName}Not;
+		}
+	
+		public void set${property.firstUpperPropertyName}Not(${property.javaType} ${property.propertyName}Not) {
+			this.${property.propertyName}Not = ${property.propertyName}Not;
+		}
+	
+		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+		public ${property.javaType} get${property.firstUpperPropertyName}GreaterThan() {
+			return ${property.propertyName}GreaterThan;
+		}
+	
+		public void set${property.firstUpperPropertyName}GreaterThan(${property.javaType} ${property.propertyName}GreaterThan) {
+			this.${property.propertyName}GreaterThan = ${property.propertyName}GreaterThan;
+		}
+		
+		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+		public ${property.javaType} get${property.firstUpperPropertyName}LessThan() {
+			return ${property.propertyName}LessThan;
+		}
+	
+		public void set${property.firstUpperPropertyName}LessThan(${property.javaType} ${property.propertyName}LessThan) {
+			this.${property.propertyName}LessThan = ${property.propertyName}LessThan;
+		}
+	
+		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+		public ${property.javaType} get${property.firstUpperPropertyName}GreaterEqual() {
+			return ${property.propertyName}GreaterEqual;
+		}
+	
+		public void set${property.firstUpperPropertyName}GreaterEqual(${property.javaType} ${property.propertyName}GreaterEqual) {
+			this.${property.propertyName}GreaterEqual = ${property.propertyName}GreaterEqual;
+		}
+	
+		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+		public ${property.javaType} get${property.firstUpperPropertyName}LessEqual() {
+			return ${property.propertyName}LessEqual;
+		}
+	
+		public void set${property.firstUpperPropertyName}LessEqual(${property.javaType} ${property.propertyName}LessEqual) {
+			this.${property.propertyName}LessEqual = ${property.propertyName}LessEqual;
+		}
+	
+		public String get${property.firstUpperPropertyName}IsNull() {
+			return ${property.propertyName}IsNull;
+		}
+	
+		public void set${property.firstUpperPropertyName}IsNull() {
+			this.${property.propertyName}IsNull = NULL_VALUE;
+		}
+	
+		public String get${property.firstUpperPropertyName}IsNotNull() {
+			return ${property.propertyName}IsNotNull;
+		}
+	
+		public void set${property.firstUpperPropertyName}IsNotNull() {
+			this.${property.propertyName}IsNotNull = NULL_VALUE;
+		}
+	
+		public String get${property.firstUpperPropertyName}Like() {
+			return ${property.propertyName}Like;
+		}
+	
+		public void set${property.firstUpperPropertyName}Like(String ${property.propertyName}Like) {
+			this.${property.propertyName}Like = ${property.propertyName}Like;
+		}
+	
+		public String get${property.firstUpperPropertyName}NotLike() {
+			return ${property.propertyName}NotLike;
+		}
+	
+		public void set${property.firstUpperPropertyName}NotLike(String ${property.propertyName}NotLike) {
+			this.${property.propertyName}NotLike = ${property.propertyName}NotLike;
+		}
+	
+		public String get${property.firstUpperPropertyName}StartWith() {
+			return ${property.propertyName}StartWith;
+		}
+	
+		public void set${property.firstUpperPropertyName}StartWith(String ${property.propertyName}StartWith) {
+			this.${property.propertyName}StartWith = ${property.propertyName}StartWith;
+		}
+	
+		public String get${property.firstUpperPropertyName}NotStartWith() {
+			return ${property.propertyName}NotStartWith;
+		}
+	
+		public void set${property.firstUpperPropertyName}NotStartWith(String ${property.propertyName}NotStartWith) {
+			this.${property.propertyName}NotStartWith = ${property.propertyName}NotStartWith;
+		}
+	
+		public String get${property.firstUpperPropertyName}EndWith() {
+			return ${property.propertyName}EndWith;
+		}
+	
+		public void set${property.firstUpperPropertyName}EndWith(String ${property.propertyName}EndWith) {
+			this.${property.propertyName}EndWith = ${property.propertyName}EndWith;
+		}
+	
+		public String get${property.firstUpperPropertyName}NotEndWith() {
+			return ${property.propertyName}NotEndWith;
+		}
+	
+		public void set${property.firstUpperPropertyName}NotEndWith(String ${property.propertyName}NotEndWith) {
+			this.${property.propertyName}NotEndWith = ${property.propertyName}NotEndWith;
+		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+        	
+    	public ${property.javaType} get${property.firstUpperPropertyName}Or() {
+	        return this.${property.propertyName}Or;
+        }
+        
+        public void set${property.firstUpperPropertyName}Or(${property.javaType} ${property.propertyName}Or) {
+        	this.${property.propertyName}Or = ${property.propertyName}Or;
+        }
+        
+        #if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+        	
+    	public ${property.javaType}[] get${property.firstUpperPropertyName}OrIn() {
+	        return this.${property.propertyName}OrIn;
+        }
+        
+        public void set${property.firstUpperPropertyName}OrIn(${property.javaType}... ${property.propertyName}OrIn) {
+        	this.${property.propertyName}OrIn = ${property.propertyName}OrIn;
+        }
+        
+        #if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+        	
+    	public ${property.javaType}[] get${property.firstUpperPropertyName}OrNotIn() {
+	        return this.${property.propertyName}OrNotIn;
+        }
+        
+        public void set${property.firstUpperPropertyName}OrNotIn(${property.javaType}... ${property.propertyName}OrNotIn) {
+        	this.${property.propertyName}OrNotIn = ${property.propertyName}OrNotIn;
+        }
+        
+        #if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+        public ${property.javaType} get${property.firstUpperPropertyName}OrNot() {
+			return ${property.propertyName}OrNot;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrNot(${property.javaType} ${property.propertyName}OrNot) {
+			this.${property.propertyName}OrNot = ${property.propertyName}OrNot;
+		}
+	
+		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+		public ${property.javaType} get${property.firstUpperPropertyName}OrGreaterThan() {
+			return ${property.propertyName}OrGreaterThan;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrGreaterThan(${property.javaType} ${property.propertyName}OrGreaterThan) {
+			this.${property.propertyName}OrGreaterThan = ${property.propertyName}OrGreaterThan;
+		}
+		
+		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+		public ${property.javaType} get${property.firstUpperPropertyName}OrLessThan() {
+			return ${property.propertyName}OrLessThan;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrLessThan(${property.javaType} ${property.propertyName}OrLessThan) {
+			this.${property.propertyName}OrLessThan = ${property.propertyName}OrLessThan;
+		}
+	
+		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+		public ${property.javaType} get${property.firstUpperPropertyName}OrGreaterEqual() {
+			return ${property.propertyName}OrGreaterEqual;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrGreaterEqual(${property.javaType} ${property.propertyName}OrGreaterEqual) {
+			this.${property.propertyName}OrGreaterEqual = ${property.propertyName}OrGreaterEqual;
+		}
+	
+		#if($property.jdbcType == "TIMESTAMP" )
+    
+    		@JsonFormat(pattern = DateUtil.DEFAULT_DATETIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+    	#end
+		#if($property.jdbcType == "DATE")
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_DATE_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+		#end
+		#if($property.jdbcType == "TIME" )
+		
+			@JsonFormat(pattern = DateUtil.DEFAULT_TIME_FORMAT, timezone = DateUtil.DEFAULT_TIMEZONE_ID)
+        #end 
+		public ${property.javaType} get${property.firstUpperPropertyName}OrLessEqual() {
+			return ${property.propertyName}OrLessEqual;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrLessEqual(${property.javaType} ${property.propertyName}OrLessEqual) {
+			this.${property.propertyName}OrLessEqual = ${property.propertyName}OrLessEqual;
+		}
+	
+		public String get${property.firstUpperPropertyName}OrIsNull() {
+			return ${property.propertyName}OrIsNull;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrIsNull() {
+			this.${property.propertyName}OrIsNull = NULL_VALUE;
+		}
+	
+		public String get${property.firstUpperPropertyName}OrIsNotNull() {
+			return ${property.propertyName}OrIsNotNull;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrIsNotNull() {
+			this.${property.propertyName}OrIsNotNull = NULL_VALUE;
+		}
+	
+		public String get${property.firstUpperPropertyName}OrLike() {
+			return ${property.propertyName}OrLike;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrLike(String ${property.propertyName}OrLike) {
+			this.${property.propertyName}OrLike = ${property.propertyName}OrLike;
+		}
+	
+		public String get${property.firstUpperPropertyName}OrNotLike() {
+			return ${property.propertyName}OrNotLike;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrNotLike(String ${property.propertyName}OrNotLike) {
+			this.${property.propertyName}OrNotLike = ${property.propertyName}OrNotLike;
+		}
+	
+		public String get${property.firstUpperPropertyName}OrStartWith() {
+			return ${property.propertyName}OrStartWith;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrStartWith(String ${property.propertyName}OrStartWith) {
+			this.${property.propertyName}OrStartWith = ${property.propertyName}OrStartWith;
+		}
+	
+		public String get${property.firstUpperPropertyName}OrNotStartWith() {
+			return ${property.propertyName}OrNotStartWith;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrNotStartWith(String ${property.propertyName}OrNotStartWith) {
+			this.${property.propertyName}OrNotStartWith = ${property.propertyName}OrNotStartWith;
+		}
+	
+		public String get${property.firstUpperPropertyName}OrEndWith() {
+			return ${property.propertyName}OrEndWith;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrEndWith(String ${property.propertyName}OrEndWith) {
+			this.${property.propertyName}OrEndWith = ${property.propertyName}OrEndWith;
+		}
+	
+		public String get${property.firstUpperPropertyName}OrNotEndWith() {
+			return ${property.propertyName}OrNotEndWith;
+		}
+	
+		public void set${property.firstUpperPropertyName}OrNotEndWith(String ${property.propertyName}OrNotEndWith) {
+			this.${property.propertyName}OrNotEndWith = ${property.propertyName}OrNotEndWith;
+		}
+	
+	
+
+#end
+
+
+}

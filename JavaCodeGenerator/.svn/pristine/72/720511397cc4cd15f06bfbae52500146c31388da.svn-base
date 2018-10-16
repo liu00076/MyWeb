@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<database>
+  <table comment="经销商" name="agency" primarykeys="agency_id" type="TABLE">
+    <field comment="经销商ID" fieldLength="50" fieldType="varchar" name="agency_id" primaryKey="1"/>
+    <field comment="创始人姓名" fieldLength="50" fieldType="varchar" name="creater_name" nullable="1"/>
+    <field comment="公司名称" fieldLength="100" fieldType="varchar" name="corp_name" nullable="1"/>
+    <field comment="创始人手机号" fieldLength="50" fieldType="varchar" name="creater_phone" nullable="1"/>
+    <field comment="详细地址" fieldLength="200" fieldType="varchar" name="address" nullable="1"/>
+    <field comment="客服电话" fieldLength="50" fieldType="varchar" name="service_phone" nullable="1"/>
+    <field comment="未审核0； 已审核1" fieldLength="10" fieldType="varchar" name="audit_status" nullable="1"/>
+  </table>
+  <table comment="经销商操作人员表，包括经销商创始人和员工，都在这里记录" name="agency_operator" primarykeys="agency_operator_id" type="TABLE">
+    <field comment="经销商操作员ID" fieldLength="50" fieldType="varchar" name="agency_operator_id" primaryKey="1"/>
+    <field comment="经销商ID" fieldLength="50" fieldType="varchar" name="agency_id" nullable="1"/>
+    <field comment="手机号" fieldLength="20" fieldType="varchar" name="phone" nullable="1"/>
+    <field comment="openid" fieldLength="50" fieldType="varchar" name="openid" nullable="1"/>
+    <field comment="创建时间" fieldType="datetime" name="created_time" nullable="1"/>
+    <field comment="人员身份  经理1，员工2" fieldLength="10" fieldType="varchar" name="user_type" nullable="1"/>
+    <field comment="人员状态  无效0，有效1" fieldLength="10" fieldType="varchar" name="user_state" nullable="1"/>
+  </table>
+  <table comment="经销商返现表" name="cash_return" primarykeys="cash_return_id" type="TABLE">
+    <field comment="返现ID" fieldLength="50" fieldType="varchar" name="cash_return_id" primaryKey="1"/>
+    <field comment="门店支付ID" fieldLength="50" fieldType="varchar" name="shop_payment_id" nullable="1"/>
+    <field comment="返现金额" fieldType="decimal" name="amount" nullable="1" scale="0"/>
+    <field comment="经销商手机号" fieldLength="30" fieldType="varchar" name="agency_phone" nullable="1"/>
+    <field comment="经销商微信号" fieldLength="50" fieldType="varchar" name="agency_openid" nullable="1"/>
+    <field comment="微信支付订单号" fieldLength="50" fieldType="varchar" name="wx_orderid" nullable="1"/>
+    <field comment="公众号付款结果" fieldLength="50" fieldType="varchar" name="wx_pay_result" nullable="1"/>
+    <field comment="公众号付款时间" fieldType="datetime" name="wx_pay_time" nullable="1"/>
+  </table>
+  <table comment="采集器最新版本号" name="collector_version" primarykeys="collector_version_id" type="TABLE">
+    <field comment="记录ID" fieldLength="50" fieldType="varchar" name="collector_version_id" primaryKey="1"/>
+    <field comment="采集器最新版本号" fieldLength="20" fieldType="varchar" name="collector_version" nullable="1"/>
+  </table>
+  <table comment="退菜" name="dishes_back" primarykeys="dishes_back_id" type="TABLE">
+    <field comment="退菜记录ID" fieldLength="50" fieldType="varchar" name="dishes_back_id" primaryKey="1"/>
+    <field comment="shop_id" fieldLength="50" fieldType="varchar" name="shop_id" nullable="1"/>
+    <field comment="原始订单号" fieldLength="50" fieldType="varchar" name="billno" nullable="1"/>
+    <field comment="退菜原因" fieldLength="100" fieldType="varchar" name="reason" nullable="1"/>
+    <field comment="菜品名称" fieldLength="100" fieldType="varchar" name="dish_name" nullable="1"/>
+    <field comment="菜品种类" fieldLength="50" fieldType="varchar" name="dish_type" nullable="1"/>
+    <field comment="份数" fieldLength="11" fieldType="varchar" name="count" nullable="1"/>
+    <field comment="总价" fieldType="decimal" name="total" nullable="1" scale="2"/>
+    <field comment="退菜时间" fieldType="datetime" name="backtime" nullable="1"/>
+    <field comment="门店操作员姓名" fieldLength="50" fieldType="varchar" name="oper_name" nullable="1"/>
+    <field comment="订单时间" fieldLength="50" fieldType="varchar" name="execdate" nullable="1"/>
+    <field comment="实际价格" fieldType="decimal" name="actprice" nullable="1" scale="2"/>
+    <field comment="单位" fieldLength="30" fieldType="varchar" name="unit" nullable="1"/>
+    <field comment="价格" fieldType="decimal" name="price" nullable="1" scale="2"/>
+    <field comment="桌台号" fieldLength="30" fieldType="varchar" name="tablenum" nullable="1"/>
+    <field comment="原始退菜记录ID" fieldLength="50" fieldType="varchar" name="backid" nullable="1"/>
+  </table>
+  <table comment="改单（反结账）" name="order_change" primarykeys="order_change_id" type="TABLE">
+    <field comment="改单（反结账）ID" fieldLength="50" fieldType="varchar" name="order_change_id" primaryKey="1"/>
+    <field comment="shop_id" fieldLength="50" fieldType="varchar" name="shop_id" nullable="1"/>
+    <field comment="原始订单ID" fieldLength="50" fieldType="varchar" name="billno" nullable="1"/>
+    <field comment="记录提交时间" fieldType="datetime" name="created_time" nullable="1"/>
+    <field comment="改单原因" fieldLength="50" fieldType="varchar" name="reason" nullable="1"/>
+    <field comment="门店操作员姓名" fieldLength="30" fieldType="varchar" name="oper_name" nullable="1"/>
+    <field comment="反结账时间" fieldType="datetime" name="change_chk_time" nullable="1"/>
+    <field comment="cancelid" fieldLength="10" fieldType="varchar" name="cancelid" nullable="1"/>
+  </table>
+  <table comment="实时订单表" name="order_main" primarykeys="order_id" type="TABLE">
+    <field comment="实时订单ID" fieldLength="50" fieldType="varchar" name="order_id" primaryKey="1"/>
+    <field comment="门店ID" fieldLength="50" fieldType="varchar" name="shop_id" nullable="1"/>
+    <field comment="订单总金额" fieldType="decimal" name="total" nullable="1" scale="2"/>
+    <field comment="订单实际总金额" fieldType="decimal" name="acttotal" nullable="1" scale="2"/>
+    <field comment="订单状态,1为正常，0为删除" fieldLength="4" fieldType="varchar" name="status" nullable="1"/>
+    <field comment="订单折扣金额" fieldType="decimal" name="disct" nullable="1" scale="2"/>
+    <field comment="结账时间" fieldLength="30" fieldType="varchar" name="chktime" nullable="1"/>
+    <field comment="总人数" fieldLength="20" fieldType="varchar" name="people" nullable="1"/>
+    <field comment="原始订单号" fieldLength="50" fieldType="varchar" name="billno" nullable="1"/>
+    <field comment="记录采集时间" fieldLength="50" fieldType="varchar" name="created_time" nullable="1"/>
+    <field comment="桌台号" fieldLength="50" fieldType="varchar" name="tablenum" nullable="1"/>
+    <field comment="备注" fieldLength="200" fieldType="varchar" name="remark" nullable="1"/>
+    <field comment="门店操作员姓名" fieldLength="50" fieldType="varchar" name="oper_name" nullable="1"/>
+    <field comment="订单日期" fieldLength="50" fieldType="varchar" name="chkdate" nullable="1"/>
+  </table>
+  <table comment="实时订单明细表" name="orderdish" primarykeys="orderdish_id" type="TABLE">
+    <field comment="实时订单明细ID" fieldLength="50" fieldType="varchar" name="orderdish_id" primaryKey="1"/>
+    <field comment="门店ID" fieldLength="50" fieldType="varchar" name="shop_id" nullable="1"/>
+    <field comment="数量" fieldType="decimal" name="count" nullable="1" scale="2"/>
+    <field comment="单位" fieldLength="10" fieldType="char" name="unit" nullable="1"/>
+    <field comment="记录状态" fieldLength="10" fieldType="varchar" name="status" nullable="1"/>
+    <field comment="记录提交时间" fieldLength="30" fieldType="varbinary" name="created_time" nullable="1"/>
+    <field comment="原始订单ID" fieldLength="50" fieldType="varchar" name="billno" nullable="1"/>
+    <field comment="实时订单ID" fieldLength="50" fieldType="varchar" name="order_id" nullable="1"/>
+    <field comment="菜品名称" fieldLength="100" fieldType="varchar" name="dish_name" nullable="1"/>
+    <field comment="菜品种类" fieldLength="100" fieldType="varchar" name="dish_type" nullable="1"/>
+    <field comment="单价" fieldType="decimal" name="price" nullable="1" scale="2"/>
+    <field comment="小计价格" fieldType="decimal" name="total" nullable="1" scale="2"/>
+    <field comment="备注" fieldLength="100" fieldType="varchar" name="remarks" nullable="1"/>
+    <field comment="结账时间" fieldLength="50" fieldType="varchar" name="chkdate" nullable="1"/>
+  </table>
+  <table comment="单据支付明细" name="orderpays" primarykeys="orderpays_id" type="TABLE">
+    <field comment="支付明细ID" fieldLength="50" fieldType="varchar" name="orderpays_id" primaryKey="1"/>
+    <field comment="原始订单ID" fieldLength="50" fieldType="varchar" name="billno" nullable="1"/>
+    <field comment="门店ID" fieldLength="50" fieldType="varchar" name="shop_id" nullable="1"/>
+    <field comment="支付金额" fieldType="decimal" name="payval" nullable="1" scale="2"/>
+    <field comment="支付途径中文名称" fieldLength="50" fieldType="varchar" name="payway" nullable="1"/>
+    <field comment="记录状态" fieldLength="10" fieldType="varchar" name="status" nullable="1"/>
+    <field comment="创建时间" fieldLength="30" fieldType="varchar" name="created_time" nullable="1"/>
+    <field comment="order_id" fieldLength="50" fieldType="varchar" name="order_id" nullable="1"/>
+    <field comment="结账时间" fieldLength="50" fieldType="varchar" name="chkdate" nullable="1"/>
+  </table>
+  <table comment="当前未结账订单" name="outstanding_order" primarykeys="outstanding_order_id" type="TABLE">
+    <field comment="未结账订单ID" fieldLength="50" fieldType="varchar" name="outstanding_order_id" primaryKey="1"/>
+    <field comment="shop_id" fieldLength="50" fieldType="varchar" name="shop_id" nullable="1"/>
+    <field comment="未结账订单号" fieldLength="50" fieldType="varchar" name="billno" nullable="1"/>
+    <field comment="桌台号" fieldLength="50" fieldType="varchar" name="tablenum" nullable="1"/>
+    <field comment="开始时间" fieldLength="50" fieldType="varchar" name="begin_time" nullable="1"/>
+    <field comment="就餐人数" fieldLength="20" fieldType="varchar" name="people" nullable="1"/>
+    <field comment="总金额" fieldType="decimal" name="total" nullable="1" scale="2"/>
+  </table>
+  <table comment="当前未结账订单明细" name="outstanding_orderdishes" primarykeys="outstanding_orderdishes_id" type="TABLE">
+    <field comment="未结账订单明细ID" fieldLength="50" fieldType="varchar" name="outstanding_orderdishes_id" primaryKey="1"/>
+    <field comment="份数" fieldLength="11" fieldType="varchar" name="count" nullable="1"/>
+    <field comment="单价" fieldType="decimal" name="price" nullable="1" scale="2"/>
+    <field comment="金额" fieldType="decimal" name="total_amount" nullable="1" scale="2"/>
+    <field comment="单位" fieldLength="20" fieldType="varchar" name="unit" nullable="1"/>
+    <field comment="shopid" fieldLength="50" fieldType="varchar" name="shop_id" nullable="1"/>
+    <field comment="order_id" fieldLength="50" fieldType="varchar" name="order_id" nullable="1"/>
+    <field comment="菜品名称" fieldLength="100" fieldType="varchar" name="dish_name" nullable="1"/>
+    <field comment="菜品种类" fieldLength="50" fieldType="varchar" name="dish_type" nullable="1"/>
+    <field comment="原始订单号" fieldLength="50" fieldType="varchar" name="billno" nullable="1"/>
+  </table>
+  <table comment="用户提醒记录表" name="remind" primarykeys="remind" type="TABLE">
+    <field comment="提醒记录ID" fieldLength="50" fieldType="varchar" name="remind" primaryKey="1"/>
+    <field comment="退菜提醒：1" fieldLength="10" fieldType="varchar" name="msg_type" nullable="1"/>
+    <field comment="消息内容" fieldLength="500" fieldType="varchar" name="msg_content" nullable="1"/>
+    <field comment="发送时间" fieldType="datetime" name="send_time" nullable="1"/>
+    <field comment="openid" fieldLength="50" fieldType="varchar" name="openid" nullable="1"/>
+    <field comment="发送状态  未发送0  已发送1" fieldLength="10" fieldType="varchar" name="send_state" nullable="1"/>
+  </table>
+  <table comment="提醒设置" name="remind_setup" primarykeys="remind_setup" type="TABLE">
+    <field comment="提醒设置ID" fieldLength="50" fieldType="varchar" name="remind_setup" primaryKey="1"/>
+    <field comment="用户微信号" fieldLength="50" fieldType="varchar" name="open_id" nullable="1"/>
+    <field comment="用户手机号" fieldLength="20" fieldType="varchar" name="phone" nullable="1"/>
+    <field comment="退单提醒开关   关0；开1" fieldLength="10" fieldType="varchar" name="dishes_back_switch" nullable="1"/>
+    <field comment="营业额提醒开关 关0；开1" fieldLength="10" fieldType="varchar" name="turnover_switch" nullable="1"/>
+  </table>
+  <table comment="报表" name="report" primarykeys="report_id" type="TABLE">
+    <field comment="报表ID" fieldType="int" name="report_id" primaryKey="1" scale="0"/>
+    <field comment="报表名称" fieldLength="100" fieldType="varchar" name="report_name" nullable="1"/>
+  </table>
+  <table comment="报表查看日志" name="report_viewlog" primarykeys="report_viewlog_id" type="TABLE">
+    <field comment="报表查看ID" fieldLength="50" fieldType="varchar" name="report_viewlog_id" primaryKey="1"/>
+    <field comment="报表ID" fieldLength="50" fieldType="varchar" name="report_id" nullable="1"/>
+    <field comment="用户手机号" fieldLength="30" fieldType="varchar" name="phone" nullable="1"/>
+    <field comment="用户微信号" fieldLength="50" fieldType="varchar" name="openid" nullable="1"/>
+    <field comment="查看时间" fieldType="datetime" name="view_time" nullable="1"/>
+    <field comment="停留时长" fieldType="decimal" name="view_long" nullable="1" scale="0"/>
+  </table>
+  <table comment="门店表" name="shop" primarykeys="shop_id" type="TABLE">
+    <field comment="门店ID" fieldLength="50" fieldType="varchar" name="shop_id" primaryKey="1"/>
+    <field comment="门店名称" fieldLength="200" fieldType="varchar" name="shop_name" nullable="1"/>
+    <field comment="所在省" fieldLength="30" fieldType="varchar" name="province" nullable="1"/>
+    <field comment="所在市" fieldLength="30" fieldType="varchar" name="city" nullable="1"/>
+    <field comment="详细地址" fieldLength="300" fieldType="varchar" name="address" nullable="1"/>
+    <field comment="电话" fieldLength="30" fieldType="varchar" name="phone" nullable="1"/>
+    <field comment="门店有效状态：有效1，无效0" fieldLength="10" fieldType="varchar" name="status" nullable="1"/>
+    <field comment="门店创建时间" fieldType="datetime" name="create_time" nullable="1"/>
+    <field comment="门店资料更新时间" fieldType="datetime" name="update_time" nullable="1"/>
+    <field comment="最新连接时间" fieldType="datetime" name="last_connected_time" nullable="1"/>
+    <field comment="有效期费用开始时间" fieldType="datetime" name="begin_time" nullable="1"/>
+    <field comment="有效期费用截止时间" fieldType="datetime" name="end_time" nullable="1"/>
+    <field comment="免费期1、正常交费期2、过期3" fieldLength="10" fieldType="varchar" name="pay_state" nullable="1"/>
+    <field comment="经销商ID" fieldLength="50" fieldType="varchar" name="agency_id" nullable="1"/>
+    <field comment="经销商操作员ID" fieldLength="50" fieldType="varchar" name="agency_operator_id" nullable="1"/>
+    <field comment="采集器key" fieldLength="50" fieldType="varchar" name="access_key" nullable="1"/>
+    <field comment="桌台数" fieldType="int" name="table_num" nullable="1" scale="0"/>
+    <field comment="餐饮软件产品代码" fieldLength="10" fieldType="varchar" name="software_type" nullable="1"/>
+    <field comment="该店报表价格" fieldType="decimal" name="report_price" nullable="1" scale="0"/>
+    <field comment="店主姓名" fieldLength="30" fieldType="varchar" name="owner_name" nullable="1"/>
+    <field comment="店主电话" fieldLength="30" fieldType="varchar" name="owner_phone" nullable="1"/>
+  </table>
+  <table comment="商户采集器版本表" name="shop_collector" primarykeys="shop_collector" type="TABLE">
+    <field comment="商户采集器版本ID" fieldLength="50" fieldType="varchar" name="shop_collector" primaryKey="1"/>
+    <field comment="shop_id" fieldLength="50" fieldType="varchar" name="shop_id" nullable="1"/>
+    <field comment="商户采集器版本" fieldLength="50" fieldType="varchar" name="collector_version" nullable="1"/>
+  </table>
+  <table comment="门店支付表" name="shop_payment" primarykeys="shop_payment_id" type="TABLE">
+    <field comment="门店支付ID" fieldLength="50" fieldType="varchar" name="shop_payment_id" primaryKey="1"/>
+    <field comment="shop_id" fieldLength="50" fieldType="varchar" name="shop_id" nullable="1"/>
+    <field comment="支付人微信号" fieldLength="50" fieldType="varchar" name="shop_oper_openid" nullable="1"/>
+    <field comment="支付人手机号" fieldLength="30" fieldType="varchar" name="shop_oper_phone" nullable="1"/>
+    <field comment="支付金额" fieldType="decimal" name="pay_amount" nullable="1" scale="0"/>
+    <field comment="支付时间" fieldType="datetime" name="pay_time" nullable="1"/>
+    <field comment="支付状态  支付失败0；支付成功1；" fieldLength="10" fieldType="varchar" name="pay_state" nullable="1"/>
+    <field comment="该笔支付是否已返现  未返现0；已返现1" fieldLength="10" fieldType="varchar" name="is_cash_return" nullable="1"/>
+  </table>
+  <table comment="门店定价操作记录" name="shop_price_his" primarykeys="shop_price_his_id" type="TABLE">
+    <field comment="门店定价操作记录ID" fieldLength="50" fieldType="varchar" name="shop_price_his_id" primaryKey="1"/>
+    <field comment="shop_id" fieldLength="50" fieldType="varchar" name="shop_id" nullable="1"/>
+    <field comment="经销商ID" fieldLength="50" fieldType="varchar" name="agency_id" nullable="1"/>
+    <field comment="开始时间" fieldType="datetime" name="begin_time" nullable="1"/>
+    <field comment="截止时间" fieldType="datetime" name="end_time" nullable="1"/>
+    <field comment="价格" fieldType="decimal" name="price" nullable="1" scale="0"/>
+    <field comment="记录创建时间" fieldType="datetime" name="created_time" nullable="1"/>
+    <field comment="经销商操作员ID" fieldLength="50" fieldType="varchar" name="agency_operator_id" nullable="1"/>
+    <field comment="备注" fieldLength="50" fieldType="varchar" name="remark" nullable="1"/>
+  </table>
+  <table comment="店铺创建的时候，临时表" name="shop_temp" primarykeys="shop_temp_id" type="TABLE">
+    <field comment="店面创建临时表ID" fieldLength="50" fieldType="varchar" name="shop_temp_id" primaryKey="1"/>
+    <field comment="店面名称" fieldLength="100" fieldType="varchar" name="shop_name" nullable="1"/>
+    <field comment="地址" fieldLength="200" fieldType="varchar" name="address" nullable="1"/>
+    <field comment="店铺电话" fieldLength="30" fieldType="varchar" name="phone" nullable="1"/>
+    <field comment="老板姓名" fieldLength="50" fieldType="varchar" name="owner_name" nullable="1"/>
+    <field comment="老板电话" fieldLength="30" fieldType="varchar" name="owner_phone" nullable="1"/>
+    <field comment="采集器key" fieldLength="50" fieldType="varchar" name="accesskey" nullable="1"/>
+  </table>
+  <table comment="门店用户报表关联表" name="shopuser_report" primarykeys="shopuser_report_id" type="TABLE">
+    <field comment="门店用户报表关联ID" fieldLength="50" fieldType="varchar" name="shopuser_report_id" primaryKey="1"/>
+    <field comment="门店ID" fieldLength="50" fieldType="varchar" name="shop_id" nullable="1"/>
+    <field comment="人员电话" fieldLength="20" fieldType="varchar" name="phone" nullable="1"/>
+    <field comment="人员姓名" fieldLength="30" fieldType="varchar" name="name" nullable="1"/>
+    <field comment="店主1、报表使用者2" fieldLength="10" fieldType="varchar" name="user_type" nullable="1"/>
+    <field comment="无效0； 有效1" fieldLength="10" fieldType="varchar" name="user_state" nullable="1"/>
+    <field comment="微信的openid" fieldLength="50" fieldType="varchar" name="openid" nullable="1"/>
+    <field comment="创建时间" fieldType="datetime" name="create_time" nullable="1"/>
+  </table>
+  <table comment="餐饮软件产品表" name="software" primarykeys="software_id" type="TABLE">
+    <field comment="餐饮软件ID" fieldLength="50" fieldType="varchar" name="software_id" primaryKey="1"/>
+    <field comment="餐饮软件名称" fieldLength="50" fieldType="varchar" name="software_name" nullable="1"/>
+    <field comment="餐饮软件代码" fieldLength="20" fieldType="varchar" name="software_code" nullable="1"/>
+  </table>
+  <table comment="超级管理员登录验证" name="user" primarykeys="user_id" type="TABLE">
+    <field comment="用户ID" fieldLength="50" fieldType="varchar" name="user_id" primaryKey="1"/>
+    <field comment="登录名" fieldLength="50" fieldType="varchar" name="loginname" nullable="1"/>
+    <field comment="密码" fieldLength="50" fieldType="varchar" name="password" nullable="1"/>
+    <field comment="姓名" fieldLength="50" fieldType="varchar" name="username" nullable="1"/>
+    <field comment="用户状态  正常1  无效0" fieldLength="10" fieldType="varchar" name="userstate" nullable="1"/>
+  </table>
+</database>

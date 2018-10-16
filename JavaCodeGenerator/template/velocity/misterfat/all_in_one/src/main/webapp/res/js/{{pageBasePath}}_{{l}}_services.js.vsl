@@ -1,0 +1,145 @@
+angular.module('${config.module}.services',['${config.module}.components'])
+.factory('CommonService',['$timeout','Http',function($timeout,Http){
+	return {
+		post : function(scope,url,condition,successfn,errorfn,failfn){
+			var timer = $timeout(function(){
+				scope.isloading = true;
+			},100);
+			Http.post(url,condition,function(data){
+				if(typeof(data)==="string" && data.length>3000){
+					location.href = "/backend/login";
+				}else{
+					$timeout.cancel(timer);
+					scope.isloading = false;
+					Http.success(data);
+					successfn && successfn(data);
+				}
+			},function(data){
+				$timeout.cancel(timer);
+				scope.isloading = false;
+				!!errorfn ?errorfn(data) : Http.error(data);
+			},function(response,code){
+				$timeout.cancel(timer);
+				scope.isloading = false;
+				!!failfn ?failfn(response,code) : Http.fail(response,code);
+				
+			});
+		},
+		upload : function(scope,url,condition,progressfn,successfn,errorfn,failfn){
+			var timer = $timeout(function(){
+				scope.isloading = true;
+			},100);
+			Http.upload(url,condition,function(progress,evt){
+				progressfn && progressfn(progress,evt);
+			},function(data){
+				if(typeof(data)==="string" && data.length>3000){
+					location.href = "/backend/login";
+				}else{
+					$timeout.cancel(timer);
+					scope.isloading = false;
+					Http.success(data);
+					successfn && successfn(data);
+				}
+			},function(data){
+				$timeout.cancel(timer);
+				scope.isloading = false;
+				!!errorfn ?errorfn(data) : Http.error(data);
+			},function(response,code){
+				$timeout.cancel(timer);
+				scope.isloading = false;
+				!!failfn ?failfn(response,code) : Http.fail(response,code);
+				
+			});
+		},
+		get : function(scope,url,condition,successfn,errorfn,failfn){
+			var timer = $timeout(function(){
+				scope.isloading = true;
+			},100);
+			Http.get(url,condition,function(data){
+				if(typeof(data)==="string" && data.length>3000){
+					location.href = "/backend/login";
+				}else{
+					$timeout.cancel(timer);
+					scope.isloading = false;
+					Http.success(data);
+					successfn && successfn(data);
+				}
+			},function(data){
+				$timeout.cancel(timer);
+				scope.isloading = false;
+				!!errorfn ?errorfn(data) : Http.error(data);
+			},function(response,code){
+				$timeout.cancel(timer);
+				scope.isloading = false;
+				!!failfn ?failfn(response,code) : Http.fail(response,code);
+				
+			});
+		},
+		load : function(scope,url,condition,successfn,errorfn,failfn){
+			var timer = $timeout(function(){
+				scope.isloading = true;
+			},100);
+			Http.get(url,condition,function(data){
+				if(typeof(data)==="string" && data.length>3000){
+					location.href = "/backend/login";
+				}else{
+					$timeout.cancel(timer);
+					scope.isloading = false;
+					successfn && successfn(data);
+				}
+			},function(data){
+				$timeout.cancel(timer);
+				scope.isloading = false;
+				!!errorfn ?errorfn(data) : Http.error(data);
+			},function(response,code){
+				$timeout.cancel(timer);
+				scope.isloading = false;
+				!!failfn ?failfn(response,code) : Http.fail(response,code);
+				
+			});
+		},
+		queryLoad:function(scope,url,condition,successfn,errorfn,failfn){
+			var timer = $timeout(function(){
+				scope.isloading = true;
+			},100);
+			Http.post(url,condition,function(data){
+				if(typeof(data)==="string" && data.length>3000){
+					location.href = "/backend/login";
+				}else{
+					$timeout.cancel(timer);
+					scope.isloading = false;
+					successfn && successfn(data);
+				}
+			},function(data){
+				$timeout.cancel(timer);
+				scope.isloading = false;
+				!!errorfn ?errorfn(data) : Http.error(data);
+			},function(response,code){
+				$timeout.cancel(timer);
+				scope.isloading = false;
+				!!failfn ?failfn(response,code) : Http.fail(response,code);
+				
+			});
+		}
+	}
+}])
+#foreach ( $tableModel in ${tableList})
+.factory('${tableModel.className}Service',['CommonService',function(CommonService){
+	return {
+		pageList : function(scope,condition,successfn,errorfn,failfn){
+			CommonService.post(scope,'/${config.role}/${tableModel.url}/pagelist',condition,successfn,errorfn,failfn);
+		},
+		add : function(scope,condition,successfn,errorfn,failfn){
+			CommonService.post(scope,'/${config.role}/${tableModel.url}/add',condition,successfn,errorfn,failfn);
+		},
+		del :function(scope,condition,successfn,errorfn,failfn){
+			CommonService.get(scope,'/${config.role}/${tableModel.url}/delete',condition,successfn,errorfn,failfn);
+		},
+		update : function(scope,condition,successfn,errorfn,failfn){
+			CommonService.post(scope,'/${config.role}/${tableModel.url}/edit',condition,successfn,errorfn,failfn);
+		}
+		
+		
+	}
+}])
+#end

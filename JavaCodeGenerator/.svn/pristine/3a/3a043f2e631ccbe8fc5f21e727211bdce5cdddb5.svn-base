@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+encoding//src/com/misterfat/generator/tool/db/Database.java=GBK
+encoding//src/com/misterfat/generator/tool/db/Field.java=GBK
+encoding//src/com/misterfat/generator/tool/db/Table.java=GBK
+encoding//src/com/misterfat/generator/tool/db/product/MysqlDatabase.java=GBK
+encoding//src/com/misterfat/generator/tool/exception/GeneralException.java=UTF-8
+encoding//src/com/misterfat/generator/tool/model/FieldModel.java=GBK
+encoding//src/com/misterfat/generator/tool/util/Dom4jUtil.java=GBK
+encoding//src/com/misterfat/generator/tool/util/ZipCompressUtil.java=GBK
+encoding/<project>=UTF-8
+instance/org.eclipse.core.net/org.eclipse.core.net.hasMigrated=true

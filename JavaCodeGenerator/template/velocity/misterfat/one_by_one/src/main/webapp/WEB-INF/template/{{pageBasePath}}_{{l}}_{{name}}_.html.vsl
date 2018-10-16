@@ -1,0 +1,63 @@
+<div>
+		<div class="container-fluid" st-pipe="table.callServer"
+			st-table="table.data.dataList">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="con-header">
+						<a class="btn btn-primary btn-cir" ng-click="open${tableModel.className}Add()">新增${tableModel.comment}</a>
+					</div>
+					
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="gridStyle">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th style="width: 5%;">序号</th>
+									#foreach ( $field in ${tableModel.fieldList})
+									#if($field)
+									<th style="width: 10%;">${field.comment}</th>
+									#end
+									#end
+									<th style="width: 22%;">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="row in table.data.dataList">
+									<td><div>{{table.tableState.pagination.start+$index+1}}</div></td>
+									#foreach ( $field in ${tableModel.fieldList})
+									<td><div>{{row.${field.propertyName}}}</div></td>
+									#end
+									<td><div>
+											<a href="javascript:void(0)" ng-click="deleteItem(row.${tableModel.propertyPrimarykeys[0]})" ><img style="width: 15px;" alt="item" src="res/img/manager/main/delete.png">删除</a></div>
+										</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-4">
+					<div class="page-count"><span>当前第{{table.search.pageNO}}/{{table.data.totalPage}}页</span> 
+					<span>
+						每页
+						<select ng-model='table.search.pageSize' ng-options="item for item in table.pageSizeSelector" >
+						</select>
+						条
+					</span>
+					 <span>共{{table.data.total}}条记录</span></div>
+
+				</div>
+				<div class="col-md-8">
+					<div st-pagination="" st-items-by-page="table.search.pageSize" class="table-pagination"
+						st-template="/page/${generateConfig.controllerPackage}/pagination.html" st-displayed-pages="5">
+					</div>
+
+				</div>
+			</div>
+		</div>
+</div>

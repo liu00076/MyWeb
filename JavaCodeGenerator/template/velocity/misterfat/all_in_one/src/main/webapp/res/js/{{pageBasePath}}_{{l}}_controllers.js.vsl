@@ -1,0 +1,114 @@
+angular.module('${config.module}.controllers',['smart-table','${config.module}.services','${config.module}.components','${config.module}.filters'])
+
+#foreach ( $tableModel in ${tableList})
+
+.controller('${tableModel.className}Ctrl',['$rootScope','$scope','$filter','Modal','${tableModel.className}Service',function($rootScope,$scope,$filter,Modal,${tableModel.className}Service){
+	$rootScope.paths = [{pathname:'${tableModel.comment}管理',pathclass : 'img-icon icon-institut',url:"",click:""}];
+	##符号两边必须加空格
+	#set($index=${velocityCount} - 1)
+	$rootScope.sidemenu = {active:$index};
+	
+	 $scope.table = {};
+
+	 $scope.table.search = {
+			 pageNO:1,
+			 pageSize:10
+	 };
+	 
+	 $scope.table.pageSizeSelector = [5,10,20,50,100,200]
+	 
+	 $scope.table.data = {};
+	 
+	 $scope.table.getData = function(fn){
+		 ${tableModel.className}Service.pageList($scope,$scope.table.search,function(data){
+		    	$scope.table.data = data;
+		    	if($scope.table.tableState){
+		    		$scope.table.tableState.pagination.numberOfPages = data.totalPage;
+		    	}
+		    	fn && fn(data);
+		 }); 
+	 }
+	 //获取表格数据
+	 $scope.table.callServer = function(tableState) {
+		 
+		$scope.table.tableState = tableState;
+		$scope.table.isLoading = true;
+
+	    var pagination = tableState.pagination;
+	    var pageNO = parseInt(pagination.start/$scope.table.search.pageSize) + 1;
+	    $scope.table.search.pageNO = pageNO;
+	    $scope.table.goPageNO = pageNO;
+	    
+	    $scope.table.search.pageSize = pagination.number;
+	    
+	    console.log(tableState);
+	    $scope.table.getData();
+	    
+	    
+	  };
+	  
+	  $scope.$watch('table.search', function(newVal, oldVal) {
+	        if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
+	            $scope.getData();
+	        }
+	    }, true);
+	  
+	  //打开新增${tableModel.comment}
+	  $scope.open${tableModel.className}Add = function () {
+		  
+			  Modal.open({
+			      animation: true,
+			      templateUrl: '/page/${generateConfig.controllerPackage}/modal/${generateConfig.name}_add?t=' + Math.floor(Date.now() / 1000),
+			      controller: '${tableModel.className}AddCtrl',
+			      size:'sm',
+			      resolve: {
+			        items: function () {
+			          return {
+			          };
+			        }
+			      },
+			      close : function(data){
+			    	  $scope.table.getData();
+			      },
+			      dismiss:function(data){
+			    	 // alert(data)
+			      }
+		  });
+		 
+	  };
+	  
+	  
+	  //删除
+	  $scope.deleteItem = function(id){
+		  Modal.confirm({text: '确定要删除吗?', title: '删除', ok: '确定', cancel: '取消'})
+	       .then(function() {
+	    	   ${tableModel.className}Service.del($scope,{${tableModel.propertyPrimarykeys[0]}:id},function(data){
+	    		   $scope.table.getData();
+	    	   }); 
+	    	   
+	      });
+	  }
+	  
+	  
+	
+}]).controller('${tableModel.className}AddCtrl',['$rootScope','$scope','$uibModalInstance','$confirm','$timeout','items','${tableModel.className}Service','Notify',function($rootScope,$scope,$uibModalInstance,$confirm,$timeout,items,${tableModel.className}Service,Notify){
+	$scope.isloading = false;
+	$scope.formData = items;
+	$scope.ok = function(){
+		${tableModel.className}Service.add($scope,$scope.formData,function(){
+			Notify.success('操作成功！');
+			$uibModalInstance.close();
+		});
+		
+	}
+	
+	$scope.cancel = function(){
+		$uibModalInstance.dismiss();
+		Notify.dismiss();
+	}
+
+}])
+
+#end
+
+

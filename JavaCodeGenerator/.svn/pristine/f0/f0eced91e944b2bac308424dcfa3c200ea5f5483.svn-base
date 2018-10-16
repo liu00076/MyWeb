@@ -1,0 +1,263 @@
+package ${config.package}.${config.module}.dao.base;
+
+import java.io.Serializable;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.type.JdbcType;
+
+#if(${mybatisConfig.idJdbcType}!="VARCHAR" )
+import org.apache.ibatis.annotations.Options;
+#end
+
+import com.yilaiok.spring.boot.starter.mybatis.BaseRepository;
+import com.yilaiok.spring.boot.starter.mybatis.QueryCondition;
+import ${config.package}.${config.module}.entity.${tableModel.className};
+
+/**
+ * 
+ *  说明：${tableModel.comment}对象的基础数据访问类（自动生成）
+ * 
+ * @author ${config.author}
+ * 
+ * @version ${config.version}
+ * 
+ * @since ${config.date}
+ */
+public interface ${tableModel.className}BaseDao extends BaseRepository<${tableModel.className}> {
+
+	
+	#if(${tableModel.isView}!="1" )
+	
+	/**
+	 * 
+	 * 功能描述：保存
+	 * 
+	 * @return
+	 * 
+	 * @author ${config.author}
+	 * 
+	 * @since ${config.date}
+	 * 
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+	@Insert({ "insert into ${tableModel.name} ( ${mybatisConfig.fields})  values (${mybatisConfig.fieldsValues})" })
+	@Override
+	#if(${mybatisConfig.fieldId} && ${mybatisConfig.idJdbcType}!="VARCHAR" )
+	@Options(useGeneratedKeys = true, keyProperty = "${mybatisConfig.propId}")
+	#end
+	public int insert(${tableModel.className} ${tableModel.objectName});
+
+	/**
+	 * 
+	 * 功能描述：选择字段保存
+	 * 
+	 * @return
+	 * 
+	 * @author ${config.author}
+	 * 
+	 * @since ${config.date}
+	 * 
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+	@Insert({
+			"<script>",
+			" insert into ${tableModel.name} <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\" > ${mybatisConfig.insertSelective} </trim>  <trim prefix=\"values (\" suffix=\")\" suffixOverrides=\",\" > ${mybatisConfig.insertSelectiveValues} </trim>",
+			"</script>" })
+	@Override
+	#if(${mybatisConfig.fieldId} && ${mybatisConfig.idJdbcType}!="VARCHAR" )
+	@Options(useGeneratedKeys = true, keyProperty = "${mybatisConfig.propId}")
+	#end
+	public int insertSelective(${tableModel.className} ${tableModel.objectName});
+
+
+	 #if(${mybatisConfig.fieldId})
+	/**
+	 * 
+	 * 功能描述：根据ID删除
+	 * 
+	 * @return
+	 * 
+	 * @author ${config.author}
+	 * 
+	 * @since ${config.date}
+	 * 
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+	@Delete({ "delete from ${tableModel.name} where ${mybatisConfig.fieldId} = #{id,jdbcType=${mybatisConfig.idJdbcType}}" })
+	@Override
+	public int deleteById(Serializable id);
+
+	
+
+	/**
+	 * 
+	 * 功能描述：根据ID数组批量删除
+	 * 
+	 * @return
+	 * 
+	 * @author ${config.author}
+	 * 
+	 * @since ${config.date}
+	 * 
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+	@Delete({
+			"<script>",
+			"delete from ${tableModel.name} where ${mybatisConfig.fieldId} in <foreach  item=\"id\"  collection=\"array\" open=\"(\" separator=\",\" close=\")\" > #{id} </foreach>",
+			"</script>" })
+	@Override
+	public int batchDelete(Serializable... ids);
+
+	#end
+	
+	/**
+	 * 
+	 * 功能描述：更新
+	 * 
+	 * @return
+	 * 
+	 * @author ${config.author}
+	 * 
+	 * @since ${config.date}
+	 * 
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+	@Update({ "update ${tableModel.name} set ${mybatisConfig.update} where ${mybatisConfig.fieldId} = #{${mybatisConfig.propId},jdbcType=${mybatisConfig.idJdbcType}} " })
+	@Override
+	public int update(${tableModel.className} ${tableModel.objectName});
+
+	/**
+	 * 
+	 * 功能描述：选择字段更新
+	 * 
+	 * @return
+	 * 
+	 * @author ${config.author}
+	 * 
+	 * @since ${config.date}
+	 * 
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+	@Update({
+			"<script>",
+			"update ${tableModel.name} <set > ${mybatisConfig.updateSelective} </set> where ${mybatisConfig.fieldId} = #{${mybatisConfig.propId},jdbcType=${mybatisConfig.idJdbcType}}",
+			"</script>" })
+	@Override
+	public int updateSelective(${tableModel.className} ${tableModel.objectName});
+	
+	#end
+
+	/**
+	 * 
+	 * 功能描述：查询所有
+	 * 
+	 * @return
+	 * 
+	 * @author ${config.author}
+	 * 
+	 * @since ${config.date}
+	 * 
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+	@Select({ "select * from ${tableModel.name}" })
+	@Results({${mybatisConfig.results} })
+	@Override
+	public List<${tableModel.className}> findAll();
+
+	/**
+	 * 
+	 * 功能描述：查询总数
+	 * 
+	 * @return
+	 * 
+	 * @author ${config.author}
+	 * 
+	 * @since ${config.date}
+	 * 
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+	 #if(${mybatisConfig.fieldId})
+	@Select({ "select count(${mybatisConfig.fieldId}) from ${tableModel.name}" })
+	#else
+	@Select({ "select count(*) from ${tableModel.name}" })
+	#end
+	@Override
+	public int findTotalCount();
+
+
+	 #if(${mybatisConfig.fieldId})
+	 
+	/**
+	 * 
+	 * 功能描述：根据ID查询
+	 * 
+	 * @return
+	 * 
+	 * @author ${config.author}
+	 * 
+	 * @since ${config.date}
+	 * 
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+	@Select({ "select * from ${tableModel.name} where ${mybatisConfig.fieldId} = #{id,jdbcType=${mybatisConfig.idJdbcType}}" })
+	@Results({${mybatisConfig.results} })
+	@Override
+	public ${tableModel.className} findById(Serializable id);
+
+	#end
+
+	/**
+	 * 
+	 * 功能描述：根据查询对象查询
+	 * 
+	 * @return
+	 * 
+	 * @author ${config.author}
+	 * 
+	 * @since ${config.date}
+	 * 
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+	@Select({
+			"<script>",
+			"select * from ${tableModel.name} <where> 1 = 1 ${mybatisConfig.likeWhere} </where>",
+			"</script>" })
+	@Results({${mybatisConfig.results} })
+	@Override
+	public List<${tableModel.className}> findList(QueryCondition query);
+
+	/**
+	 * 
+	 * 功能描述：根据查询对象查询记录数
+	 * 
+	 * @return
+	 * 
+	 * @author ${config.author}
+	 * 
+	 * @since ${config.date}
+	 * 
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+    #if(${mybatisConfig.fieldId})
+	@Select({
+			"<script>",
+			"select count(${mybatisConfig.fieldId}) from ${tableModel.name} <where> 1 = 1 ${mybatisConfig.likeWhere} </where>",
+			"</script>" })
+	#else
+	@Select({
+			"<script>",
+			"select count(*) from ${tableModel.name} <where> 1 = 1 ${mybatisConfig.likeWhere} </where>",
+			"</script>" })
+	#end
+	@Override
+	public int findCount(QueryCondition query);
+
+
+}
+

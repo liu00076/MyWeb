@@ -1,0 +1,19 @@
+package ${config.package}.${config.module}.dao;
+
+
+import ${config.package}.${config.module}.dao.base.${tableModel.className}BaseDao;
+
+/**
+ * 
+ *  说明：${tableModel.comment}对象的数据访问类
+ * 
+ * @author ${config.author}
+ * 
+ * @version ${config.version}
+ * 
+ * @since ${config.date}
+ */
+public interface ${tableModel.className}Dao extends ${tableModel.className}BaseDao {
+
+}
+

@@ -1,0 +1,110 @@
+package ${config.package}.${config.module}.service;
+
+import java.io.Serializable;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import com.yilaiok.spring.boot.starter.mybatis.Pagelist;
+import ${config.package}.${config.module}.entity.${tableModel.className};
+import ${config.package}.${config.module}.qo.${tableModel.className}Qo;
+
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class ${tableModel.className}ServiceTest {
+	
+	@Autowired
+	private ${tableModel.className}Service ${tableModel.objectName}Service;
+
+	@Test
+	public void testInsert() {
+		${tableModel.className} ${tableModel.objectName} = new ${tableModel.className}();
+		${tableModel.objectName}Service.insert(${tableModel.objectName});
+	}
+
+	@Test
+	public void testInsertSelective() {
+		${tableModel.className} ${tableModel.objectName} = new ${tableModel.className}();
+		${tableModel.objectName}Service.insertSelective(${tableModel.objectName});
+	}
+
+	@Test
+	public void testUpdate() {
+		${tableModel.className} ${tableModel.objectName} = new ${tableModel.className}();
+		${tableModel.objectName}Service.update(${tableModel.objectName});
+	}
+
+	@Test
+	public void testUpdateSelective() {
+		${tableModel.className} ${tableModel.objectName} = new ${tableModel.className}();
+		${tableModel.objectName}Service.updateSelective(${tableModel.objectName});
+	}
+
+
+	@Test
+	public void testDeleteById() {
+		String id = "";
+		${tableModel.objectName}Service.deleteById(id);
+	}
+
+	@Test
+	public void testBatchDelete() {
+		Serializable[] ids = new String[] {};
+		${tableModel.objectName}Service.batchDelete(ids);
+	}
+
+	@Test
+	public void testFindAll() {
+		List<${tableModel.className}> list = ${tableModel.objectName}Service.findAll();
+		if (list != null && !list.isEmpty()) {
+			for (${tableModel.className} ${tableModel.objectName} : list) {
+				System.out.println(${tableModel.objectName}.getId());
+			}
+		}
+	}
+
+	@Test
+	public void testFindById() {
+		Serializable id = "";
+		${tableModel.className} ${tableModel.objectName} = ${tableModel.objectName}Service.findById(id);
+		System.out.println(${tableModel.objectName}.getId());
+	}
+
+	@Test
+	public void testFindList() {
+		${tableModel.className}Qo ${tableModel.objectName}Qo = new ${tableModel.className}Qo();
+		List<${tableModel.className}> list = ${tableModel.objectName}Service.findList(${tableModel.objectName}Qo);
+		if (list != null && !list.isEmpty()) {
+			for (${tableModel.className} ${tableModel.objectName} : list) {
+				System.out.println(${tableModel.objectName}.getId());
+			}
+		}
+	}
+
+	@Test
+	public void testFindTotalCount() {
+		int totalCount = ${tableModel.objectName}Service.findTotalCount();
+		System.out.println(totalCount);
+	}
+
+	@Test
+	public void testFindCount() {
+		${tableModel.className}Qo ${tableModel.objectName}Qo = new ${tableModel.className}Qo();
+		int totalCount = ${tableModel.objectName}Service.findCount(${tableModel.objectName}Qo);
+		System.out.println(totalCount);
+	}
+
+	@Test
+	public void testFindPaginationList() {
+		${tableModel.className}Qo query = new ${tableModel.className}Qo();
+		Pagelist<${tableModel.className}> pagelist = ${tableModel.objectName}Service
+				.findPaginationList(query);
+		System.out.println(pagelist);
+	}
+
+
+}

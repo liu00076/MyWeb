@@ -1,0 +1,263 @@
+package com.misterfat.generator.exec;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.misterfat.generator.tool.db.product.MysqlDatabase;
+import com.misterfat.generator.tool.util.NumberUtil;
+
+/**
+ * 
+ * 数据迁移
+ *
+ * @author 耿沫然
+ *
+ * @version
+ *
+ * @since 2016年7月19日
+ */
+public class DataMigration {
+
+	public static void main(String[] args) {
+		MysqlDatabase database = new MysqlDatabase("jdbc:mysql://121.42.12.41:3306/rczl-v2?characterEncoding=utf-8",
+				"root", "new.1234");
+		try {
+			List<Map<String, Object>> examResultList = database
+					.executeQuery("select * from exam_result where dimension_id in (1,2,3,4) and exam_record_id = 345");
+			List<String> sqls = new ArrayList<String>();
+			List<String> sqls2 = new ArrayList<String>();
+			for (Map<String, Object> examResult : examResultList) {
+				String ids = "";
+				String dimension_id = examResult.get("dimension_id").toString();
+				String exam_record_id = examResult.get("exam_record_id").toString();
+				if ("1".equals(dimension_id)) {
+					ids = "7,9";
+				} else if ("2".equals(dimension_id)) {
+					ids = "11,12";
+				} else if ("3".equals(dimension_id)) {
+					ids = "18,19";
+				} else if ("4".equals(dimension_id)) {
+					ids = "24,28";
+				}
+				String sql = "select sum(exam_score) as score from exam_result where dimension_id in(" + ids
+						+ ") and exam_record_id = " + exam_record_id;
+
+				List<Map<String, Object>> exam_result_list = database.executeQuery(sql);
+				String score = exam_result_list.get(0).get("score").toString();
+				String show_score = NumberUtil.toFixed(Float.valueOf(score), 1) + "";
+
+				String sql1 = "update exam_result set exam_score = " + score + ",show_score=" + show_score
+						+ " where dimension_id = " + dimension_id + " and exam_record_id = " + exam_record_id;
+				sqls.add(sql1);
+
+				String sql2 = "select id from report_explain_word where dimension_id = " + dimension_id
+						+ " and is_calc_score = 0 and ((start_match_score =  " + score
+						+ " and start_match_type like '%等于') or (start_match_score > " + score
+						+ " and start_match_type like '小于%')  or (start_match_score <   " + score
+						+ " and start_match_type like '大于%') ) and ((end_match_score =  " + score
+						+ " and end_match_type like '%等于') or (end_match_score >  " + score
+						+ " and end_match_type like '小于%')  or (end_match_score <   " + score
+						+ " and end_match_type like '大于%') )";
+				List<Map<String, Object>> list = database.executeQuery(sql2);
+				if (list != null && !list.isEmpty()) {
+
+					for (Map<String, Object> map : list) {
+						String report_explain_word_id = map.get("id").toString();
+
+						String sql4 = "select id from exam_result_explain_view where exam_record_id = " + exam_record_id
+								+ " and dimension_id = " + dimension_id;
+
+						List<Map<String, Object>> idList = database.executeQuery(sql4);
+						for (Map<String, Object> map2 : idList) {
+							String exam_result_explain_id = map2.get("id").toString();
+							String sql3 = "update exam_result_explain set report_explain_word_id = "
+									+ report_explain_word_id + " where id =  " + exam_result_explain_id;
+							sqls2.add(sql3);
+						}
+
+					}
+
+				}
+
+			}
+
+			database.executeUpdate(sqls.toArray(new String[sqls.size()]));
+			database.executeUpdate(sqls2.toArray(new String[sqls2.size()]));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * 
+	 * 功能描述：知了测评记录迁移
+	 *
+	 * 
+	 * @author 耿沫然
+	 *
+	 * @since 2016年7月29日
+	 *
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+	public static void zhiLiaoExamRecordOldToNew() {
+
+		MysqlDatabase oldDatabase = new MysqlDatabase(
+				"jdbc:mysql://121.42.12.41:3306/rczl_temp20160612?characterEncoding=utf-8", "root", "new.1234");
+
+		try {
+			List<Map<String, Object>> examRecordList = oldDatabase.executeQuery("select * from exam_record");
+			for (Map<String, Object> examRecord : examRecordList) {
+				System.out.println(examRecord.get("id"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * 
+	 * 功能描述：知了数据迁移
+	 *
+	 * 
+	 * @author 耿沫然
+	 *
+	 * @since 2016年7月19日
+	 *
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
+	 */
+	public static void zhiLiaoOldToNew() {
+
+		MysqlDatabase oldDatabase = new MysqlDatabase(
+				"jdbc:mysql://121.42.12.41:3306/rczl_temp20160612?characterEncoding=utf-8", "root", "new.1234");
+
+		MysqlDatabase newDatabase = new MysqlDatabase(
+				"jdbc:mysql://121.42.12.41:3306/rczl-real-v2?characterEncoding=utf-8", "root", "new.1234");
+
+		try {
+
+			// 查询机构
+			List<Map<String, Object>> institutionsList = oldDatabase.executeQuery("select * from institutions");
+
+			// 查询测评用户
+			List<Map<String, Object>> examPersonList = oldDatabase.executeQuery("select * from exam_person");
+
+			// 查询用户
+			List<Map<String, Object>> usersList = oldDatabase.executeQuery("select * from users");
+
+			// 查询用户角色
+			List<Map<String, Object>> userRolesList = oldDatabase.executeQuery("select * from user_roles");
+
+			// 查询机构用户
+			List<Map<String, Object>> institutionsPersonList = oldDatabase
+					.executeQuery("select * from institutions_person");
+
+			// 查询测评
+			List<Map<String, Object>> examList = oldDatabase.executeQuery("select * from exam");
+
+			// *********插入新库**********
+
+			Map<String, Integer> userIdMap = new HashMap<String, Integer>();
+
+			// 插入用户
+			for (Map<String, Object> user : usersList) {
+
+				Integer userId = (Integer) user.get("id");
+				String loginName = (String) user.get("username");
+
+				String guid = SqlGenerator.toSqlParam((String) user.get("guid"));
+				String createTime = SqlGenerator.toSqlParam(user.get("create_time"));
+				String archived = SqlGenerator.toSqlParam(user.get("archived"));
+				String version = SqlGenerator.toSqlParam(user.get("version"));
+				String password = SqlGenerator.toSqlParam(user.get("password"));
+				String username = SqlGenerator.toSqlParam(loginName);
+				String defaultUser = SqlGenerator.toSqlParam(user.get("default_user"));
+				String lastLoginTime = SqlGenerator.toSqlParam(user.get("last_login_time"));
+				newDatabase.executeUpdate(
+						"insert into users ( id,guid,create_time,archived,version,password,username,default_user,last_login_time) values ("
+								+ userId + "," + guid + "," + createTime + "," + archived + "," + version + ","
+								+ password + "," + username + "," + defaultUser + "," + lastLoginTime + ")");
+
+				userIdMap.put(loginName, userId);
+
+			}
+
+			// 插入用户角色
+			for (Map<String, Object> userRole : userRolesList) {
+				newDatabase.executeUpdate("insert into user_roles (users_id,roles_id) values ("
+						+ SqlGenerator.toSqlParam(userRole.get("users_id")) + ","
+						+ SqlGenerator.toSqlParam(userRole.get("roles_id")) + ")");
+			}
+
+			// 插入测评用户
+			for (Map<String, Object> examPerson : examPersonList) {
+
+				newDatabase.executeUpdate(
+						"insert into exam_person ( id,real_name,sex,birthday,email,highest_education,school,specialty,work_experience,industries,position,project_experience,enterprise_stage,station,del,user_id,register_source)  values "
+								+ "(" + SqlGenerator.toSqlParam(examPerson.get("id")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("real_name")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("sex")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("birthday")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("email")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("highest_education")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("school")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("specialty")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("work_experience")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("industries")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("position")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("project_experience")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("enterprise_stage")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("station")) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("del")) + ","
+								+ SqlGenerator.toSqlParam(userIdMap.get(examPerson.get("login_name"))) + ","
+								+ SqlGenerator.toSqlParam(examPerson.get("register_source")) + ")");
+
+				newDatabase.executeUpdate("update users set last_login_time= "
+						+ SqlGenerator.toSqlParam(examPerson.get("last_login_time")) + " where id = "
+						+ SqlGenerator.toSqlParam(userIdMap.get(examPerson.get("login_name"))));
+
+			}
+
+			// 插入机构
+			for (Map<String, Object> institutions : institutionsList) {
+				newDatabase.executeUpdate(
+						"insert into agency ( id,name,type,logo,url,address,contact_person,email,phone,memo,status,del)  values "
+								+ "(" + SqlGenerator.toSqlParam(institutions.get("id")) + ","
+								+ SqlGenerator.toSqlParam(institutions.get("name")) + ","
+								+ SqlGenerator
+										.toSqlParam(((String) institutions.get("name")).equals("散户机构") ? "散户机构" : null)
+								+ "," + SqlGenerator.toSqlParam(institutions.get("logo")) + ","
+								+ SqlGenerator.toSqlParam(null) + ","
+								+ SqlGenerator.toSqlParam(institutions.get("address")) + ","
+								+ SqlGenerator.toSqlParam(institutions.get("contact_person")) + ","
+								+ SqlGenerator.toSqlParam(institutions.get("email")) + ","
+								+ SqlGenerator.toSqlParam(institutions.get("phone")) + ","
+								+ SqlGenerator.toSqlParam(institutions.get("memo")) + ","
+								+ SqlGenerator.toSqlParam(institutions.get("status")) + ","
+								+ SqlGenerator.toSqlParam(institutions.get("del")) + ")");
+			}
+
+			// 插入机构用户
+			for (Map<String, Object> institutionsPerson : institutionsPersonList) {
+				newDatabase.executeUpdate(
+						"insert into agency_person ( id,agency_id,exam_person_id,join_time,status)  values " + "("
+								+ SqlGenerator.toSqlParam(institutionsPerson.get("id")) + ","
+								+ SqlGenerator.toSqlParam(institutionsPerson.get("institutions_id")) + ","
+								+ SqlGenerator.toSqlParam(institutionsPerson.get("exam_person_id")) + ","
+								+ SqlGenerator.toSqlParam(institutionsPerson.get("join_time")) + ","
+								+ SqlGenerator.toSqlParam("启用") + ")");
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+}

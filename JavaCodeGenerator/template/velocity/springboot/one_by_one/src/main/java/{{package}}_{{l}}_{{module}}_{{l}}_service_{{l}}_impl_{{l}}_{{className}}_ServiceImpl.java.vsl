@@ -1,0 +1,57 @@
+##业务逻辑实现类的生成模板
+package ${config.package}.${config.module}.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.misterfat.springboot.starter.mybatis.core.AbstractBaseService;
+import com.misterfat.springboot.starter.mybatis.core.BaseRepository;
+ #if(${mybatisConfig.idJdbcType}=="VARCHAR")
+import com.misterfat.springboot.starter.core.util.RandomUtil;
+#end
+import ${config.package}.${config.module}.dao.${tableModel.className}Dao;
+import ${config.package}.${config.module}.entity.${tableModel.className};
+import ${config.package}.${config.module}.service.${tableModel.className}Service;
+
+@Service
+public class ${tableModel.className}ServiceImpl extends AbstractBaseService<${tableModel.className}>
+		implements ${tableModel.className}Service {
+
+	@Autowired
+	private ${tableModel.className}Dao ${tableModel.objectName}Dao;
+	
+	 #if(${mybatisConfig.idJdbcType}=="VARCHAR" )
+    
+    @Override
+	public int insert(${tableModel.className} ${tableModel.objectName}) {
+		if (null == ${tableModel.objectName}.get${mybatisConfig.firstUpperPropId}()) {
+			${tableModel.objectName}.set${mybatisConfig.firstUpperPropId}(RandomUtil.uuid());
+		}
+		return super.insert(${tableModel.objectName});
+	}
+
+	@Override
+	public int insertSelective(${tableModel.className} ${tableModel.objectName}) {
+		if (null == ${tableModel.objectName}.get${mybatisConfig.firstUpperPropId}()) {
+			${tableModel.objectName}.set${mybatisConfig.firstUpperPropId}(RandomUtil.uuid());
+		}
+		return super.insertSelective(${tableModel.objectName});
+	}
+
+  	#end
+  	
+
+	/***********************************************/
+	/******                                   ******/
+	/**** 请在事务方法上单独加 @Transactional 注解****/
+	/******                                   ******/
+	/***********************************************/
+	
+	@Override
+	protected BaseRepository<${tableModel.className}> getRepository() {
+		return ${tableModel.objectName}Dao;
+	}
+
+}
+
+

@@ -1,0 +1,470 @@
+package com.misterfat.generator.exec;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.tools.ant.util.FileUtils;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.output.XMLOutputter;
+
+import com.misterfat.generator.os.Shell;
+import com.misterfat.generator.tool.util.DBUtil;
+import com.misterfat.generator.tool.util.ZipCompressUtil;
+
+public class CodeGenMysql {
+	// db.driverClassName=com.mysql.jdbc.Driver
+	private String PARAM_FILE_NAME = "gen.properties";
+	private Properties properties = null;
+
+	// 数据库配置
+	private String schema = "yilaioktest";
+	private String owner = "yilaiok";
+	private String driver = "com.mysql.jdbc.Driver";
+	private String url = "jdbc:mysql://123.56.92.138:3306/yilaioktest";
+	private String username = "root";
+	private String password = "new.1234";
+	private String genTables = "";
+
+	private List tableList = new LinkedList();
+	private String[] tableShowNames = null;
+	private String[] tableComments = null;
+	private String[] tableNames = null;
+
+	// 生成代码配置
+	private String packageName = "com"; // 包名
+	private String modelName = "x"; // 模块名
+	private String author = "z"; // 作者名
+	private String jspSubFolder = null; // jsp生成目录
+	private String tableXmlPath = "D:\\temp\\1.xml"; // 生成的table.xml的路径
+	private String cur_file = this.tableXmlPath;
+	private String buildXmlPath = "I:\\project\\svn\\svnChinaCodeGenerator\\easyuiCodeGenerator\\build.xml"; // ant执行build.xml路径
+	private String zipPath = "I:\\project\\svn\\svnChinaCodeGenerator\\easyuiCodeGenerator\\code.zip";
+	private String antTask = "generate";
+	private String cmd = "cd /home/resinapp/zhjw/autoDeployTools/tmp/jckf;${AUTO_DEPLOY_HOME}libs/ant/bin/ant updateTrunk";
+
+	public static void main(String[] args) {
+		// main("AUTH_FUNCTION\nAUTH_ROLE\nAUTH_ROLE_FUNCTION\nAUTH_USER_ROLE\naccount\naccount_bank\naccount_pointdetail\naftersale_info\napp_resource\narticle_category\narticle_info\nbrand\nbrand_and_category\ncategory\ncategory_type\neg_goods\nengineer\nengineer_ability\nengineer_accredit\nengineer_bill\nengineer_bonusdetail\nengineer_imageres\nengineer_leveldetail\nengineer_levelexp\nenterprise\nenterprise_brandcategory\nenterprise_region\nevaluate\nfeedback\ngood_price\ngoods_description\ngoods_type\ninfor_reader\ninformation\nmodel\nnetwork\noauth_access_token\noauth_client_details\noauth_client_token\noauth_code\noauth_refresh_token\norder_attachment\norder_compete\norder_info\norder_items\norder_paymentinfo\norder_proceeding\norder_refuse\norder_series\norder_trace\npoints_rules\nprov_city_area\nselection_codes\nuser\nuser_address\nuser_invoice\nuser_recommend\nuser_search_history\nuser_voucher\nview_goods\nvoucher\nvoucher_series",
+		main("view_engineer_bonus_incoming", "com.yilaiok", "web", "耿沫然",
+				"D:\\JAVA_Dev_All\\workspace_template\\code-generator\\yilaiok\\codeGenerator\\table.xml",
+				"D:\\JAVA_Dev_All\\workspace_template\\code-generator\\yilaiok\\codeGenerator\\build.xml",
+				"D:\\temp\\code.zip", "gen.properties", "cmd /c ant generate", "hdzx/hb");
+	}
+
+	public static void main(String tableList, String packageValue, String modelValue, String authorValue,
+			String configFileValue, String antXmlFile, String destZip, String PARAM_FILE_NAME, String cmd,
+			String jspSubFolder) {
+		CodeGenMysql codeGen = new CodeGenMysql();
+		codeGen.cmd = cmd;
+		codeGen.jspSubFolder = jspSubFolder;
+		codeGen.PARAM_FILE_NAME = PARAM_FILE_NAME;
+		codeGen.packageName = packageValue;
+		codeGen.modelName = modelValue;
+		codeGen.author = authorValue;
+		codeGen.tableXmlPath = configFileValue;
+		codeGen.cur_file = configFileValue;
+		codeGen.buildXmlPath = antXmlFile;
+
+		tableList = tableList.replace("\r", "");
+		String[] array = tableList.split("\n");
+		for (int i = 0; i < array.length; i++) {
+			codeGen.tableList.add(array[i]);
+		}
+
+		System.out.println("start");
+		codeGen.dealTable();
+		codeGen.generCode();
+		ZipCompressUtil t = new ZipCompressUtil();
+		FileUtils.delete(new File(destZip));
+		// t.zip(antXmlFile.replace("build.xml", "out"), destZip);
+		System.out.println("finish");
+	}
+
+	boolean isTwinceTable(String tableName) {
+		if (tableName == null) {
+			return false;
+		}
+		tableName = tableName.toUpperCase();
+		if ((this.tables.containsKey(tableName)) && (this.tables.containsKey("V_" + tableName))) {
+			return true;
+		}
+		return false;
+	}
+
+	boolean isTwinceView(String tableName) {
+		if (tableName == null) {
+			return false;
+		}
+		tableName = tableName.toUpperCase();
+		if ((tableName.startsWith("V_")) && (this.tables.containsKey(tableName.substring(2)))) {
+			return true;
+		}
+		return false;
+	}
+
+	private Map tables = new HashMap();
+
+	public void dealTable() {
+
+		try {
+
+			// 连接数据库
+			DBUtil.initDataSource(this.driver, this.url, this.username, this.password);
+
+			// 查询表信息的SQL
+			String findTableSql = "select f.* from  ( SELECT t.TABLE_SCHEMA  as OWNER, t.TABLE_NAME as table_name, 'TABLE' as TABLE_TYPE,t.TABLE_COMMENT as comments FROM information_schema.tables as t  where t.TABLE_SCHEMA = '"
+					+ schema + "' AND t.TABLE_NAME in (" + this.genTables + ") ) f ";
+
+			System.out.println(findTableSql);
+
+			// 表信息列表
+			List tableList = DBUtil.executeQuery(findTableSql);
+			this.tableNames = new String[tableList.size()];
+			this.tableComments = new String[tableList.size()];
+			this.tableShowNames = new String[tableList.size()];
+
+			int i = 0;
+			for (Iterator each = tableList.iterator(); each.hasNext();) {
+				Map cols = (Map) each.next();
+
+				this.tableNames[i] = ((String) cols.get("table_name"));
+				this.tableComments[i] = ((String) cols.get("comments"));
+				if (this.tableComments[i] != null) {
+					this.tableShowNames[i] = (this.tableNames[i] + "   (" + this.tableComments[i] + ")");
+				} else {
+					this.tableShowNames[i] = this.tableNames[i];
+				}
+				i++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// 写table.xml
+		Document doc = new Document();
+		doc.setRootElement(new Element("root"));
+		StringWriter outStr = new StringWriter();
+		try {
+			for (int n = 0; n < this.tableShowNames.length; n++) {
+				handleTable(doc.getRootElement(), this.tableNames[n], this.tableComments[n]);
+			}
+
+			// XMLOutputter out = new XMLOutputter(" ", true, "UTF8");
+			XMLOutputter out = new XMLOutputter();
+			out.output(doc, outStr);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		System.out.println(outStr.toString());
+		File file = new File(this.cur_file);
+		try {
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter(this.cur_file, false);
+			writer.write(outStr.toString());
+		} catch (Exception ex) {
+			ex.printStackTrace(System.out);
+			try {
+				writer.close();
+			} catch (IOException localIOException) {
+			}
+		} finally {
+			try {
+				writer.close();
+			} catch (IOException localIOException1) {
+			}
+		}
+	}
+
+	public void generCode() {
+		File file = new File(this.PARAM_FILE_NAME);
+		try {
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			InputStream in = new FileInputStream(file);
+			this.properties = new Properties();
+			this.properties.load(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		this.properties.setProperty("package", this.packageName);
+		this.properties.setProperty("model", this.modelName);
+		this.properties.setProperty("author", this.author);
+		this.properties.setProperty("configFile", this.tableXmlPath);
+		this.properties.setProperty("jspSubFolder", this.jspSubFolder);
+
+		file = new File(this.PARAM_FILE_NAME);
+		try {
+			this.properties.store(new FileOutputStream(file), "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		String s = null;
+		StringBuffer echo = new StringBuffer();
+		try {
+			File workDir = new File(".");
+
+			echo.append(Shell.exe(this.cmd));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(echo);
+	}
+
+	private void handleTable(Element root, String tableName, String tableCnName) throws SQLException {
+		Element object = new Element("object");
+		// object.setAttribute("name", tableName.toLowerCase());
+		object.setAttribute("name", tableName);
+		if (tableCnName == null) {
+			object.setAttribute("cnName", object.getAttribute("name").getValue());
+		} else {
+			if (tableCnName.indexOf('\n') != -1) {
+				tableCnName = tableCnName.substring(0, tableCnName.indexOf('\n'));
+			}
+			object.setAttribute("cnName", tableCnName);
+		}
+		object.setAttribute("numPercentPage", "20");
+		object.setAttribute("dbtableName", object.getAttribute("name").getValue());
+		object.setAttribute("isSearch", "0");
+		object.setAttribute("editStyle", "1");
+		object.setAttribute("cached", "0");
+
+		if (isTwinceTable(tableName)) {
+			object.setAttribute("twinceTable", "1");
+			object.setAttribute("twinceViewName", ("V_" + tableName).toLowerCase());
+			object.setAttribute("twinceViewNameCaptial", transFirstCharToUpperCase(("V_" + tableName).toLowerCase()));
+		}
+		if (isTwinceView(tableName)) {
+			object.setAttribute("twinceView", "1");
+			object.setAttribute("twinceTableName", tableName.substring(2).toLowerCase());
+			object.setAttribute("twinceTableNameCaptial",
+					transFirstCharToUpperCase(tableName.substring(2).toLowerCase()));
+		}
+
+		List pkColumns = queryPkColumns(tableName);
+
+		List columns = queryAllColumns(tableName);
+
+		for (Iterator each = columns.iterator(); each.hasNext();) {
+			Map column = (Map) each.next();
+
+			for (Iterator iterator = column.keySet().iterator(); iterator.hasNext();) {
+				Object object2 = iterator.next();
+				System.out.println(" keySet " + object2);
+
+			}
+
+			String col_name = (String) column.get("name");
+			String col_cn = null;
+			BigDecimal col_len = null;
+			if (column.get("cnname") != null) {
+				col_cn = (String) column.get("cnname");
+			}
+			String col_type = (String) column.get("type");
+			col_type = col_type.toUpperCase();
+			if ("DATETIME".equals(col_type)) {
+				col_type = "TIMESTAMP";
+			} else if ("INT".equals(col_type)) {
+				col_type = "INTEGER";
+			}
+
+			if (column.get("data_length") != null) {
+				col_len = BigDecimal.valueOf(((BigInteger) column.get("data_length")).doubleValue());
+			} else {
+				col_len = BigDecimal.valueOf(0);
+			}
+
+			String col_scale = "0";
+			if (column.get("scale") != null) {
+				col_scale = column.get("scale").toString();
+			}
+			String nullable = (String) column.get("nullable");
+			boolean isPk = false;
+			if (pkColumns.contains(col_name)) {
+				isPk = true;
+			}
+
+			Element prop = new Element("property");
+			prop.setAttribute("name", col_name.toLowerCase());
+			prop.setAttribute("jdbcType", col_type.toUpperCase());
+			prop.setAttribute("isPK", String.valueOf(isPk));
+			if (col_cn != null) {
+				prop.addContent(new Element("cnName").setAttribute("value", col_cn));
+			} else {
+				prop.addContent(new Element("cnName").setAttribute("value", col_name.toLowerCase()));
+			}
+
+			if ((col_type.matches("CHAR")) && (col_len.intValue() > 100)) {
+				prop.addContent(new Element("isList").setAttribute("value", "0"));
+			} else {
+				prop.addContent(new Element("isList").setAttribute("value", "1"));
+			}
+			prop.addContent(new Element("listWidth").setAttribute("value", ""));
+			prop.addContent(new Element("isSearch").setAttribute("value", "0"));
+			if (nullable.equalsIgnoreCase("Y")) {
+				prop.addContent(new Element("isNull").setAttribute("value", "1"));
+			} else {
+				prop.addContent(new Element("isNull").setAttribute("value", "0"));
+			}
+
+			prop.addContent(new Element("isRepeat").setAttribute("value", "1"));
+			prop.addContent(new Element("dbcolumnTable").setAttribute("value", col_name));
+
+			Element showProp = new Element("displayType");
+			if (col_type.matches("DATE")) {
+				showProp.setAttribute("value", "date");
+			} else {
+				showProp.setAttribute("value", "text");
+			}
+			showProp.setAttribute("readOnly", "0");
+			showProp.setAttribute("length", "");
+			showProp.setAttribute("defaultValue", "");
+			prop.addContent(showProp);
+
+			Element innerProp = new Element("proType");
+			innerProp.setAttribute("length", "0");
+			innerProp.setAttribute("pointLength", "0");
+			innerProp.setAttribute("style", "");
+			if (isPk) {
+				innerProp.setAttribute("value", "id");
+			}
+			if (col_type.indexOf("CHAR") > -1) {
+				innerProp.setAttribute("length", String.valueOf(col_len.intValue()));
+
+			} else if ((col_type.indexOf("INT") > -1)) {
+				innerProp.setAttribute("value", "integer");
+
+			} else if ((col_type.indexOf("NUMBER") > -1)
+
+			|| (col_type.indexOf("DOUBLE") > -1)) {
+				innerProp.setAttribute("value", "double");
+				innerProp.setAttribute("pointLength", col_scale.toString());
+			} else if ((col_type.indexOf("DECIMAL") > -1)) {
+				innerProp.setAttribute("value", "decimal");
+				innerProp.setAttribute("pointLength", col_scale.toString());
+			} else if ((col_type.indexOf("FLOAT") > -1)) {
+				innerProp.setAttribute("value", "float");
+				innerProp.setAttribute("pointLength", col_scale.toString());
+			} else if ((col_type.indexOf("DATE") > -1) || (col_type.indexOf("TIME") > -1)) {
+				innerProp.setAttribute("value", "date");
+				innerProp.setAttribute("style", "yyyy-MM-dd");
+			} else if (col_type.matches("BOOLEAN") || col_type.matches("BIT")) {
+				innerProp.setAttribute("value", "boolean");
+			} else {
+				innerProp.setAttribute("value", "string");
+				innerProp.setAttribute("length", col_len.toString());
+			}
+			prop.addContent(innerProp);
+
+			object.addContent(prop);
+		}
+
+		root.addContent(object);
+	}
+
+	private String transFirstCharToUpperCase(String str) {
+		if ((str == null) || (str.length() == 0)) {
+			return "";
+		}
+
+		char first = str.charAt(0);
+		if (!Character.isUpperCase(first)) {
+			return Character.toUpperCase(first) + str.substring(1);
+		}
+		return str;
+	}
+
+	private String transFirstCharToLowerCase(String str) {
+		if ((str == null) || (str.length() == 0)) {
+			return "";
+		}
+
+		char first = str.charAt(0);
+		if (!Character.isLowerCase(first)) {
+			return Character.toLowerCase(first) + str.substring(1);
+		}
+		return str;
+	}
+
+	private List queryPkColumns(String table) throws SQLException {
+		List result = new ArrayList();
+		StringBuffer sql = new StringBuffer();
+
+		// sql.append("select COLUMN_NAME as COLUMN_NAME from user_cons_columns
+		// where constraint_name = (select constraint_name from user_constraints
+		// where table_name = '"
+		// +
+		// table.toUpperCase() + "' and constraint_type ='P' and OWNER = '"
+		// +
+		// this.owner.toUpperCase() + "')");
+
+		sql.append(
+				"select f.* from  (  SELECT k.COLUMN_NAME FROM information_schema.table_constraints t LEFT JOIN information_schema.key_column_usage k USING(constraint_name,table_schema,table_name) "
+						+ "WHERE t.constraint_type='PRIMARY KEY' AND t.table_schema='" + schema + "' AND t.table_name='"
+						// + table.toUpperCase()
+						+ table + "' ) f");
+
+		System.out.println(sql.toString());
+
+		List all = DBUtil.executeQuery(sql.toString());
+		if ((all == null) || (all.size() == 0)) {
+			System.out.println("all is empty ");
+			all = DBUtil.executeQuery(" select 'PID' as COLUMN_NAME from dual ");
+			System.out.println(" select 'PID' as COLUMN_NAME from dual " + all.size());
+		}
+		Iterator each = all.iterator();
+		while (each.hasNext()) {
+			result.add(((Map) each.next()).get("column_name"));
+		}
+
+		System.out.println("c" + result);
+		return result;
+	}
+
+	private List queryAllColumns(String table) throws SQLException {
+		StringBuffer sql = new StringBuffer();
+
+		// sql.append("Select cols.column_id as id, cols.column_name as name,
+		// nullable,");
+		// sql.append(" data_type as type,data_length,data_scale
+		// scale,substr(comments,1,30) cnname ");
+		// sql.append(" FROM sys.user_col_comments coms, sys.user_tab_columns
+		// cols");
+		// sql.append(" where coms.table_name=cols.Table_Name and
+		// coms.column_name=cols.column_Name");
+		// sql.append(" and cols.table_name =
+		// '").append(table.toUpperCase()).append("'");
+		// sql.append(" order by column_id");
+		sql.append(
+				" select f.* from  (  SELECT t.ORDINAL_POSITION as ID, t.COLUMN_NAME as NAME, left(t.IS_NULLABLE,1) as nullable, t.DATA_TYPE as 'TYPE', t.CHARACTER_MAXIMUM_LENGTH as DATA_LENGTH ");
+		sql.append(" ,t.NUMERIC_SCALE as SCALE, t.COLUMN_COMMENT as CNNAME FROM INFORMATION_SCHEMA.COLUMNS as t ");
+		sql.append("WHERE table_name = '" + table + "' and t.TABLE_SCHEMA = '" + schema + "' ) f");
+
+		System.out.println(sql.toString());
+		return DBUtil.executeQuery(sql.toString());
+	}
+}
