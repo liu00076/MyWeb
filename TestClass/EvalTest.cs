@@ -48,7 +48,7 @@ namespace TestClass
 
 
         [TestMethod]
-        public void Test()
+        public static void Tests()
         {
             var data = new Info { id = 1, name = "test", birthday = DateTime.Now };
             string[] props = { "id", "birthday" };//可变
