@@ -43,7 +43,7 @@ namespace Helper
         /// <param name="url"></param>
         /// <param name="statusCode"></param>
         /// <returns></returns>
-        public static string HeadResponse(string url, out string statusCode)
+        public static bool HeadResponse(string url, out string statusCode)
         {
             var httpClient = new HttpClient();
             HttpResponseMessage response = httpClient.SendAsync(new HttpRequestMessage
@@ -52,12 +52,7 @@ namespace Helper
                 RequestUri = new Uri(url)
             }).Result;
             statusCode = response.StatusCode.ToString();
-            if (response.IsSuccessStatusCode)
-            {
-                string result = response.Content.ReadAsStringAsync().Result;
-                return result;
-            }
-            return null;            
+            return response.IsSuccessStatusCode;                     
         }
 
         public static string RestfulGet(string url)
