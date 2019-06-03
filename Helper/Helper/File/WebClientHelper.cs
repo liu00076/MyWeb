@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace Helper.Helper.File
+namespace Helper
 {
     /// <summary>
     /// description：http post請求客戶端

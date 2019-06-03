@@ -4,9 +4,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using Helper.Log;
 
-namespace Helper.Helper.Net.TCP
+namespace Helper
 {
     /// <summary>
     ///     tcp 帮助类

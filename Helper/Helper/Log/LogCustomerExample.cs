@@ -6,7 +6,7 @@ using System.Text;
 using log4net.Core;
 using log4net.Layout.Pattern;
 
-namespace Helper.Helper.Log
+namespace Helper
 {
     /// <summary>
     /// log 记录到 sql中 配置自定义属性

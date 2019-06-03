@@ -53,5 +53,12 @@ namespace TestClass
             myName name = AssemblyHelper.Convert<myName>(nameValue);
             Console.WriteLine(name.OtherName);
         }
+
+        public void TestHttpClientHelper()
+        {
+            string statusCode = null;
+            HttpClientHelper.HeadResponse("http://10.5.4.40:81/Static/4121EC1F-79EA-4B7E-8109-0137B247CB2A/20190330/9437be4e-846e-485f-a62d-618e66e4c35c.丰荟公馆s.pdf",out statusCode);
+            Console.WriteLine(statusCode);
+        }
     }
 }

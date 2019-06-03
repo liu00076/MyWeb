@@ -6,7 +6,7 @@ using log4net;
 using log4net.Core;
 
 [assembly: log4net.Config.XmlConfigurator(ConfigFile = @"config\Log4Net.config", Watch = true)]
-namespace Helper.Log
+namespace Helper
 {
     /*<configSections>节点配置文件
      * <section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler, log4net"/>

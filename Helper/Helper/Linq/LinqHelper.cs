@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
-namespace Helper.Helper.Linq
+namespace Helper
 {
     /// <summary>
     /// Linq 的帮助类

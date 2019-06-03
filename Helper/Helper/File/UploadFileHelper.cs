@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace Helper.Helper.File
+namespace Helper
 {
     /// <summary>
     /// C# 通过WebRequest上传文件

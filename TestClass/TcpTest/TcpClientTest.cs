@@ -7,7 +7,7 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Helper.Helper.Net.TCP;
+using Helper;
 
 namespace TestClass.TcpTest
 {
