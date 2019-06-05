@@ -7,6 +7,7 @@ namespace TestClass
     using System.Collections.Specialized;
     using System.IO;
     using System.Reflection;
+    using Newtonsoft.Json.Linq;
     public class HelperTest
     {
 
@@ -57,8 +58,13 @@ namespace TestClass
         public void TestHttpClientHelper()
         {
             string statusCode = null;
-            HttpClientHelper.HeadResponse("http://10.5.4.40:81/Static/4121EC1F-79EA-4B7E-8109-0137B247CB2A/20190330/9437be4e-846e-485f-a62d-618e66e4c35c.丰荟公馆s.pdf",out statusCode);
+            string result = HttpClientHelper.GetResponse("https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wx2edd0a15e1e8b939&corpsecret=Do2J7A1q3Z_iHsArAxoIJAaDrMJz6zEMvWUmeq7UnxU", out statusCode);
+            
             Console.WriteLine(statusCode);
+            JObject json = JObject.Parse(result);
+            string accessToken = Convert.ToString(json["access_token"]);
+            Console.WriteLine(result);
+            Console.WriteLine(accessToken);
         }
     }
 }
